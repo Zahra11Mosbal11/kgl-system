@@ -1,0 +1,113 @@
+/* CSS for Login Page */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f3dc;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.logo-box {
+  margin-left: 100px;
+}
+.welcome-text,
+.sing-up {
+  color: #c7a34d;
+  text-decoration: none;
+}
+.forgot-link {
+  margin-left: 50px;
+  text-decoration: none;
+  color: #c7a34d;
+}
+/* login buttons */
+.sing-butn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #dcaf48;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.sing-butn:hover {
+  background-color: #e2c173;
+  color: white;
+}
+.google-btn {
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
+  border-radius: 5px;
+  border: #ceb782 1px solid;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: white;
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+}
+.g-btn {
+  background-color: white;
+  color: #dcaf48;
+  border: none;
+  cursor: pointer;
+}
+.sing-up-text {
+  margin-top: 24px;
+  text-align: center;
+  color: #667085;
+  size: 12px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .logo-box {
+    margin-left: 100px;
+  }
+
+  body {
+    flex-direction: column;
+  }
+}
+/* Mobile */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo-box {
+    margin-left: 0;
+  }
+
+  .forgot-link {
+    margin-left: 0;
+    display: block;
+    text-align: center;
+  }
+
+  .sing-butn,
+  .google-btn {
+    font-size: 14px;
+  }
+}
+/* Small phones */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+
+  .sing-butn {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
