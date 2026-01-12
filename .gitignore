@@ -1,0 +1,27 @@
+# Node modules (very important!)
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Mac system files
+.DS_Store
+
+# Build folders (if any)
+dist/
+build/
+
+# Optional large files you don't want
+*.zip
+*.tar.gz
+*.exe
+*.iso
+
+# IDE files (optional)
+.vscode/
+.idea/
