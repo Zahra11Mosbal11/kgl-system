@@ -13,7 +13,7 @@
   width: 80%;
   height: 100vh;
   overflow-y: auto;
-  background-color: #ffffff;
+  background-color: #FEFDFB;
 }
 
 .header {
@@ -22,7 +22,7 @@
   left: 20%;         
   width: 80%;       
   height: 80px;
-  background-color: #fefdfb;
+  background-color: #FDFAF6;
   color: #174e36;
   padding: 20px;
   border-bottom: 1px solid #e0e0e0;
@@ -54,7 +54,7 @@
 
 .sidebar {
   position: fixed;
-  background-color: #fefdfb;
+  background-color: #FDFAF6;
   top: 0;
   left: 0;
   height: 100vh;
@@ -101,11 +101,17 @@
 }
 
 .nav-item:hover {
+  background-color: rgba(220, 175, 72, 0.1);
+  padding: 5px 10px;
+  border-radius: 6px;
   color: #dcaf48;
   cursor: pointer;
 }
 .nav-item.active {
   color: #dcaf48;
+  background-color: rgba(220, 175, 72, 0.1);
+  padding: 5px 10px;
+  border-radius: 6px;
 }
 .settings-logout{
   margin-top: 50px; ;
@@ -232,7 +238,6 @@
 /* chart section*/
 .chart-container {
   width: 550px;
- 
   background: white;
   border-radius: 12px;
   padding: 25px;
@@ -242,6 +247,9 @@
 
 /* top selling stock */
 /* Table Styling */
+.top-selling-section {
+  background-color: white;
+}
 .top-selling-section table {
   width: 100%;
   border-collapse: collapse;

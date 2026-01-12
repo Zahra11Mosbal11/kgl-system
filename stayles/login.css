@@ -2,7 +2,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9f3dc;
+  background-color: #F9F3E7  !important;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -10,9 +10,21 @@ body {
   height: 100vh;
   margin: 0;
 }
-.logo-box {
-  margin-left: 100px;
+.container {
+  background-color: transparent;;
 }
+.form-box {
+  background-color: white;;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+}
+.logo-text{
+  text-align: center;
+}
+
 .welcome-text,
 .sing-up {
   color: #c7a34d;
