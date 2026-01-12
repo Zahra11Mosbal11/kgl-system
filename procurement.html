@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/procurement.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>New Product</h1>
+
+      <form d="procurementForm" action="">
+        <div class="lab">
+          <label>Supplier Name</label>
+          <input type="text" id="supplierName" required />
+        </div>
+
+        <div class="lab">
+          <label>Supplier Contact</label>
+          <input type="tel" id="supplierContact" required />
+        </div>
+
+        <div class="lab">
+          <label>Purchase Date</label>
+          <input type="date" id="purchaseDate" required />
+        </div>
+
+        <div class="lab">
+          <label>Invoice Number</label>
+          <input type="text" id="invoiceNumber" required />
+        </div>
+
+        <div class="lab">
+          <label>Product Name</label>
+          <input type="text" id="ProductName" required />
+        </div>
+
+        <div class="lab">
+          <label>Product Category</label>
+          <select id="Category" required>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="lab">
+          <label>Quantity</label>
+          <input type="number" id="quantity" required />
+        </div>
+
+        <div class="lab">
+          <label>Unit Price</label>
+          <input type="number" id="price" step="0.01" required />
+        </div>
+
+        <div class="lab">
+          <label>Total Amount</label>
+          <input type="number" id="total" readonly />
+        </div>
+
+        <div class="rad">
+          <label>Payment Method</label>
+          <label
+            ><input type="radio" name="payment_method" value="Cash" />
+            Cash</label
+          >
+          <label
+            ><input type="radio" name="payment_method" value="Mobile Money" />
+            Mobile Money</label
+          >
+          <label
+            ><input type="radio" name="payment_method" value="Bank Transfer" />
+            Bank Transfer</label
+          >
+          <label
+            ><input type="radio" name="payment_method" value="Credit" />
+            Credit</label
+          >
+        </div>
+
+        <div class="rad">
+          <label>Payment Status</label>
+          <label
+            ><input type="radio" name="payment_status" value="Paid" />
+            Paid</label
+          >
+          <label
+            ><input type="radio" name="payment_status" value="Pending" />
+            Pending</label
+          >
+          <label
+            ><input type="radio" name="payment_status" value="Partial" />
+            Partial</label
+          >
+        </div>
+
+        <div class="lab-date">
+          <label>Delivery Date</label>
+          <input type="date" id="deliveryDate" required />
+        </div>
+
+        <div class="lab-textarea">
+          <label>Notes / Description</label>
+          <textarea rows="4"></textarea>
+        </div>
+
+        <div class="lab">
+          <label>Receipt Upload</label>
+          <input type="file" id="receipt" accept="image/*" />
+        </div>
+        <p id="errorMsg" style="color: red; font-weight: bold"></p>
+        <div class="buttonG">
+          <button type="submit" class="btn1">Submit</button>
+          <button type="reset" class="resetb">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="procurement.js"></script>
+  </body>
+</html>

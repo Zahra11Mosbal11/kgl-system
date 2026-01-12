@@ -1,0 +1,103 @@
+body {
+    background-color: #FFF;
+    display: flex;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+  background: #FDFAF6;
+  width: 100%;
+  max-width: 480px;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);}
+        
+        
+
+h1 {
+    text-align: center;
+    color: #ffbd39;
+  margin-bottom: 30px;
+  
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+label {
+    color: #000;
+    
+    margin-bottom: 5px;
+}
+
+.lab,
+.lab-date,
+.lab-textarea {
+    display: flex;
+    flex-direction: column;
+    width: calc(50% - 15px);
+}
+
+.lab-textarea {
+    width: 100%;
+}
+
+.rad {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #fff;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #ffbd39;
+}
+
+.buttonG {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e39d04;
+    color: white;
+}
+
+.btn1 {
+    background-color: #e39d04;
+    color: white;
+}
+
+.resetb {
+    background-color: transparent;
+    border: 1px solid #e39d04;
+    color: #e39d04;
+}
