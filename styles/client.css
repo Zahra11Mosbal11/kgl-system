@@ -1,0 +1,78 @@
+
+
+.tabal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px;
+}
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.clients-table th, 
+.clients-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.filter-buttons button {
+  padding: 6px 12px;
+  margin: 4px;
+  border: none;
+  cursor: pointer;
+
+}
+
+
+.filter-btn {
+  border: #5D6679 1px solid;
+  background-color: white;
+  color: #5D6679;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.filter-btn.active {
+  border: #dcaf48 1px solid;
+  
+  color: #dcaf48;
+}
+
+.badge.active { color: green; }
+.badge.credit { color: orange; }
+.badge.inactive { color: red; }
+
+.search-input {
+  padding: 6px;
+  width: 200px;
+}
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+.btn-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-view {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+.btn-view :hover {
+  background: #000000;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}

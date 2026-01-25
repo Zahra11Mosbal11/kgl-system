@@ -115,30 +115,25 @@
 .settings-logout{
   margin-top: 250px; ;
 }
-.Overall{
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  margin: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-.Overall h3{
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
+
 .Overall-content{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 20px;
   align-items: center;
+  margin: 25px;
 }
 .Overall-content div{
- text-align: center;
+  text-align: center;
+  border-radius: 12px;
+  width: 25%;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+}
+.Overall-content div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 .Overall-content h4{
 
@@ -159,6 +154,12 @@
 .overall-desc {
   font-size: 13px;
   color: #95a5a6;
+}
+.add-search{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px;
 }
 .table-section{
   background: white;
@@ -196,6 +197,7 @@
   color: #5D6679 !important;
   font-size: 14px !important;
 }
+
 .table-bottom{
   margin-top: 10px;
 }

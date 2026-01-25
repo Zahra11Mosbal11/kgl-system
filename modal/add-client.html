@@ -1,0 +1,85 @@
+<!-- Add Client Modal -->
+<div class="modal fade client-modal" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addClientModalLabel">
+          <i class="fas fa-user-plus me-2"></i>Add New Client
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="client-form" id="addClientForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientName">Full Name <span class="required">*</span></label>
+                <input type="text" class="form-control" id="clientName" placeholder="Enter client full name" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientPhone">Phone Number <span class="required">*</span></label>
+                <input type="tel" class="form-control" id="clientPhone" placeholder="07XXXXXXXX" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientEmail">Email Address</label>
+                <input type="email" class="form-control" id="clientEmail" placeholder="client@example.com">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientLocation">Location <span class="required">*</span></label>
+                <input type="text" class="form-control" id="clientLocation" placeholder="Enter client location" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientNIN">National ID (NIN)</label>
+                <input type="text" class="form-control" id="clientNIN" placeholder="CM12345678ABCD9E">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clientType">Client Type</label>
+                <select class="form-control" id="clientType">
+                  <option value="individual">Individual</option>
+                  <option value="company">Company</option>
+                  <option value="restaurant">Restaurant/Hotel</option>
+                  <option value="wholesaler">Wholesaler</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="clientNotes">Notes</label>
+            <textarea class="form-control" id="clientNotes" rows="3" placeholder="Any additional information about this client..."></textarea>
+          </div>
+          
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="allowCredit">
+            <label class="form-check-label" for="allowCredit">
+              Allow credit purchases for this client
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="gold-btn" onclick="saveClient()">
+          <i class="fas fa-save me-2"></i>Save Client
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
