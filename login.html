@@ -18,7 +18,7 @@
         <!-- Login Form Section -->
         <div class="form-box col-md-5 col-lg-4 ">
           <div class="logo-text">
-            <img width="50" src="assist/KGL_logo.png" alt="" />
+            <img width="50" src="assets/images/KGL_logo.png" alt="" />
             <h2>Log in to your account</h2>
             <p class="welcome-text">Welcome back! Please enter your details.</p>
           </div>
@@ -58,13 +58,6 @@
               <a href="#" class="forgot-link"> Forgot password? </a>
             </div>
             <button type="submit" class="sing-butn">Sign in</button>
-            <div class="google-btn">
-              <img src="assist/Social icon.png" alt="" />
-              <button type="submit" class="g-btn">Sign in with Google</button>
-            </div>
-            <p class="sing-up-text">
-              Don’t have an account? <a class="sing-up" href=""> Sign up</a>
-            </p>
           </form>
         </div>
         <!-- Logo Section -->
@@ -77,19 +70,31 @@
     <script>
       //  login handl
       document.addEventListener("DOMContentLoaded", () => {
-        if (!localStorage.getItem("registeredUser")) {
-          const defaultUser = {
-            username: "kgl_admin",
-            password: "groceries2026",
-            role: "Manager"
-          };
-          localStorage.setItem("registeredUser", JSON.stringify(defaultUser));
+        // Initialize default users if not present
+        if (!localStorage.getItem("registeredUsers")) {
+          const defaultUsers = [
+            {
+              username: "manager",
+              password: "password123",
+              role: "Manager"
+            },
+            {
+              username: "sales",
+              password: "password123",
+              role: "Sales Agent"
+            },
+            {
+              username: "director",
+              password: "password123",
+              role: "Director"
+            }
+          ];
+          localStorage.setItem("registeredUsers", JSON.stringify(defaultUsers));
         }
       });
     
       
       //  Toast function
-  
       function showToast(message, type) {
         const toast = document.createElement("div");
         toast.className = `toast ${type}`;
@@ -106,7 +111,7 @@
       }
     
       
-      // 3 Login validation
+      // Login validation
      
       const loginForm = document.getElementById("loginForm");
     
@@ -125,16 +130,17 @@
           return;
         }
     
-        const registeredUser = JSON.parse(localStorage.getItem("registeredUser"));
+        const users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+        const user = users.find(u => u.username === username);
     
         // User not found
-        if (!registeredUser || username !== registeredUser.username) {
+        if (!user) {
           showToast("Username does not exist.", "error");
           return;
         }
     
         // Wrong password
-        if (password !== registeredUser.password) {
+        if (password !== user.password) {
           showToast("Incorrect password. Please try again.", "error");
           return;
         }
@@ -143,8 +149,8 @@
         // SUCCESS
   
         const session = {
-          username: registeredUser.username,
-          role: registeredUser.role
+          username: user.username,
+          role: user.role
         };
     
         localStorage.setItem("currentSession", JSON.stringify(session));
@@ -152,7 +158,16 @@
         showToast("Login successful!", "success");
     
         setTimeout(() => {
-          window.location.href = "dashboard.html";
+          if (user.role === 'Manager') {
+            window.location.href = "manager-dashboard.html";
+          } else if (user.role === 'Sales Agent') {
+            window.location.href = "sales-agent-dashboard.html";
+          } else if (user.role === 'Director') {
+            window.location.href = "director-dashboard.html";
+          } else {
+             // Fallback
+             window.location.href = "manager-dashboard.html";
+          }
         }, 1000);
       });
     </script>

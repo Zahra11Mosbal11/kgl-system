@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles/manager_dashobard.css" />
+    <link rel="stylesheet" href="styles/manager-dashboard.css" />
     <title>Manager Dashboard</title>
     <!-- Bootstrap CSS -->
     <link
@@ -72,50 +72,50 @@
     </script>
   </head>
   <body>
-    <!-- This is the manager dashboard page -->
+    <!-- This is the dashboard page -->
     <div class="page container-fluid">
       <!-- Sidebar Section -->
       <div class="sidebar col">
         <div class="logo-dash">
-          <img width="50" src="assist/KGL_logo.png" alt="" />
+          <img width="50" src="assets/images/KGL_logo.png" alt="" />
           <p>Karibu Groceries LTD</p>
         </div>
         <div class="nav-menu">
           <a href="#" class="nav-item active">
-            <img src="svg/Rectangle 2804.svg" alt="" />
-            <span>Dashobard</span>
+            <img src="assets/icons/Rectangle 2804.svg" alt="" />
+            <span>Dashboard</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/inventory.svg" alt="" />
-            <span>Inventry</span>
+            <img src="assets/icons/inventory.svg" alt="" />
+            <span>Inventory</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/sales.svg" alt="" />
+            <img src="assets/icons/sales.svg" alt="" />
             <span>Sales</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/checklist 1.svg" alt="" />
+            <img src="assets/icons/checklist 1.svg" alt="" />
             <span>Purchases</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/suppliers.svg" alt="" />
+            <img src="assets/icons/suppliers.svg" alt="" />
             <span>Suppliers</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/report.svg" alt="" />
+            <img src="assets/icons/report.svg" alt="" />
             <span>Reports</span>
           </a>
           <a href="#" class="nav-item">
-            <img src="svg/store.svg" alt="" />
+            <img src="assets/icons/store.svg" alt="" />
             <span>Manage Store</span></a
           >
           <div class="settings-logout">
             <a href="#" class="nav-item">
-            <img src="svg/settings.svg" alt="" />
+            <img src="assets/icons/settings.svg" alt="" />
             <span>Settings</span></a
           >
-          <a href="#" class="nav-item">
-            <img src="svg/log_out.svg" alt="" />
+          <a href="#" class="nav-item" id="logoutBtn">
+            <img src="assets/icons/log_out.svg" alt="" />
             <span>Log Out</span></a
           ></div>
         </div>
@@ -124,10 +124,10 @@
       <div class="main-content">
         <!-- Header Section -->
         <div class="header">
-          <h2>Username <span>(Manager)</span></h2>
+          <h2 id="welcomeMsg">User <span>(Role)</span></h2>
           <div class="header-icons">
-            <img src="svg/bell.svg" alt="" />
-            <img src="svg/suppliers.svg" alt="" />
+            <img src="assets/icons/bell.svg" alt="" />
+            <img src="assets/icons/suppliers.svg" alt="" />
           </div>
         </div>
         <!-- Content Section -->
@@ -140,13 +140,13 @@
                   <h3>Inventory Summary</h3>
                   <div class="icon-overview">
                     <div>
-                      <img width="30px" src="assist/Quantity (1).png" alt="" />
+                      <img width="30px" src="assets/images/Quantity (1).png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">300</span> Quantity in Hand
                       </p>
                     </div>
                     <div>
-                      <img src="assist/On the way.png" alt="" />
+                      <img src="assets/images/On the way.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">100</span> To be received
                       </p>
@@ -158,13 +158,13 @@
                   <h3>Sales Overview</h3>
                   <div class="icon-overview">
                     <div>
-                      <img width="30px" src="assist/Sales.png" alt="" />
+                      <img width="30px" src="assets/images/Sales.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">200</span> Sales
                       </p>
                     </div>
                     <div>
-                      <img src="assist/Cost.png" alt="" />
+                      <img src="assets/images/Cost.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">$80000</span> Cost
                       </p>
@@ -179,13 +179,13 @@
                   <h3>Product Summary</h3>
                   <div class="icon-overview">
                     <div>
-                      <img width="30px" src="assist/Suppliers.png" alt="" />
+                      <img width="30px" src="assets/images/Suppliers.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">30</span> Suppliers
                       </p>
                     </div>
                     <div>
-                      <img src="assist/Categories.png" alt="" />
+                      <img src="assets/images/Categories.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">10</span> Categories
                       </p>
@@ -197,13 +197,13 @@
                   <h3>Purchase Overview</h3>
                   <div class="icon-overview">
                     <div>
-                      <img width="30px" src="assist/Purchase.png" alt="" />
+                      <img width="30px" src="assets/images/Purchase.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">200</span> Purchase
                       </p>
                     </div>
                     <div>
-                      <img src="assist/Cost.png" alt="" />
+                      <img src="assets/images/Cost.png" alt="" />
                       <p class="stat-desc">
                         <span class="stat-value">$80000</span> Cost
                       </p>
@@ -300,5 +300,27 @@
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const session = JSON.parse(localStorage.getItem("currentSession"));
+        
+        if (session) {
+          const welcomeMsg = document.getElementById("welcomeMsg");
+          welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
+        } else {
+           window.location.href = "login.html";
+        }
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                localStorage.removeItem("currentSession");
+                window.location.href = "login.html";
+            });
+        }
+      });
+    </script>
   </body>
 </html>

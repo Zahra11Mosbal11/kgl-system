@@ -25,14 +25,17 @@ filterButtons.forEach(btn => {
 
 
 // Client Management Dashboard - Search Clients by Name or Email
-document.getElementById("clientSearch").addEventListener("input", function () {
-  const value = this.value.toLowerCase();
-
-  rows.forEach(row => {
-    const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(value) ? "" : "none";
-  });
-});
+const clientSearchInput = document.getElementById("clientSearch");
+if (clientSearchInput) {
+    clientSearchInput.addEventListener("input", function () {
+      const value = this.value.toLowerCase();
+  
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(value) ? "" : "none";
+      });
+    });
+  }
 
 /*Example of setting data-status attribute based on client data
 document.querySelectorAll("#clientsTableBody tr").forEach(row => {
@@ -53,9 +56,14 @@ function fetchModal(modalPath) {
 let viewBtns = document.querySelector(".btn-view");
 let editBtns = document.querySelector(".btn-edit");
 
-viewBtns.addEventListener("click", function() {
-  fetchModal('modals/viewClient.html');
-}); 
-editBtns.addEventListener("click", function() {
- alert("hello");
-});
+if (viewBtns) {
+  viewBtns.addEventListener("click", function() {
+    fetchModal('modal/view-client.html');
+  }); 
+}
+
+if (editBtns) {
+  editBtns.addEventListener("click", function() {
+   alert("hello");
+  });
+}

@@ -115,6 +115,13 @@
 .settings-logout{
   margin-top: 250px; ;
 }
+.Overall{
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
 
 .Overall-content{
   display: flex;
@@ -209,6 +216,27 @@
   margin-bottom: 0px;
 }
 
+
+.filter-buttons button {
+  padding: 6px 12px;
+  margin: 4px;
+  border: none;
+  cursor: pointer;
+
+}
+
+.sales-filter-btn {
+  border: #5D6679 1px solid;
+  background-color: white;
+  color: #5D6679;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.sales-filter-btn.active {
+  border: #dcaf48 1px solid;
+  
+  color: #dcaf48;
+}
 /* Table Styling */
 .table-body {
   width: 100%;
