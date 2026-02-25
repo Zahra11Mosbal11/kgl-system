@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory - Manager Dashboard</title>
+    <link rel="stylesheet" href="styles/manager-dashboard.css" />
+    <link rel="stylesheet" href="styles/client.css" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .inventory-table-container {
+        padding: 20px;
+        background: white;
+        margin: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page container-fluid">
+      <!-- Sidebar Section -->
+      <div class="sidebar col">
+        <div class="logo-dash">
+          <img width="50" src="assets/images/KGL_logo.png" alt="" />
+          <p>Karibu Groceries LTD</p>
+        </div>
+        <div class="nav-menu">
+          <a href="manager-dashboard.html" class="nav-item">
+            <img src="assets/icons/Rectangle 2804.svg" alt="" />
+            <span>Dashboard</span>
+          </a>
+          <a href="manager-inventory.html" class="nav-item active">
+            <img src="assets/icons/inventory.svg" alt="" />
+            <span>Inventory</span>
+          </a>
+          <a href="manager-sales.html" class="nav-item">
+            <img src="assets/icons/sales.svg" alt="" />
+            <span>Sales</span>
+          </a>
+          <a href="manager-purchases.html" class="nav-item">
+            <img src="assets/icons/checklist 1.svg" alt="" />
+            <span>Purchases</span>
+          </a>
+          <a href="manager-suppliers.html" class="nav-item">
+            <img src="assets/icons/suppliers.svg" alt="" />
+            <span>Suppliers</span>
+          </a>
+          <a href="manager-reports.html" class="nav-item">
+            <img src="assets/icons/report.svg" alt="" />
+            <span>Reports</span>
+          </a>
+          <a href="manager-store.html" class="nav-item">
+            <img src="assets/icons/store.svg" alt="" />
+            <span>Manage Store</span></a
+          >
+          <div class="settings-logout">
+            <a href="settings.html" class="nav-item">
+            <img src="assets/icons/settings.svg" alt="" />
+            <span>Settings</span></a
+          >
+          <a href="#" class="nav-item" id="logoutBtn">
+            <img src="assets/icons/log_out.svg" alt="" />
+            <span>Log Out</span></a
+          ></div>
+        </div>
+      </div>
+      <!-- Main Content Section -->
+      <div class="main-content">
+        <!-- Header Section -->
+        <div class="header">
+          <h2 id="welcomeMsg">User <span>(Role)</span></h2>
+          <div class="header-icons">
+            <img src="assets/icons/bell.svg" alt="" />
+            <img src="assets/icons/suppliers.svg" alt="" />
+          </div>
+        </div>
+        <!-- Content Section -->
+        <div class="main-content-body">
+            <div class="tabal-header">
+                <h3>Inventory List</h3>
+                <div class="filter-buttons">
+                    <input type="text" id="inventorySearch" placeholder="Search product..." class="search-input" />
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="in-stock">In Stock</button>
+                    <button class="filter-btn" data-filter="low-stock">Low Stock</button>
+                    <button class="filter-btn" data-filter="out-of-stock">Out of Stock</button>
+                </div>
+            </div>
+
+            <div class="inventory-table-container">
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Quantity In Hand</th>
+                            <th>Status</th>
+                            <th>Last Restocked</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr>
+                            <td>Grain Maize</td>
+                            <td>Cereals</td>
+                            <td>1200 kg</td>
+                            <td><span class="badge active">In Stock</span></td>
+                            <td>2024-03-10</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                    <span class="btn-edit">Edit</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Beans</td>
+                            <td>Legumes</td>
+                            <td>500 kg</td>
+                            <td><span class="badge credit">Low Stock</span></td>
+                            <td>2024-03-05</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                    <span class="btn-edit">Edit</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cow peas</td>
+                            <td>Legumes</td>
+                            <td>0 kg</td>
+                            <td><span class="badge inactive">Out of Stock</span></td>
+                            <td>2024-02-28</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                    <span class="btn-edit">Edit</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Soybeans</td>
+                            <td>Legumes</td>
+                            <td>0 kg</td>
+                            <td><span class="badge inactive">Out of Stock</span></td>
+                            <td>2024-02-28</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                    <span class="btn-edit">Edit</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>G-nuts</td>
+                            <td>Legumes</td>
+                            <td>0 kg</td>
+                            <td><span class="badge inactive">Out of Stock</span></td>
+                            <td>2024-02-28</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                    <span class="btn-edit">Edit</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const session = JSON.parse(localStorage.getItem("currentSession"));
+        if (session) {
+          const welcomeMsg = document.getElementById("welcomeMsg");
+          welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
+        } else {
+           window.location.href = "login.html";
+        }
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                localStorage.removeItem("currentSession");
+                window.location.href = "login.html";
+            });
+        }
+
+        // Inventory Search and Filter Logic
+        const searchInput = document.getElementById('inventorySearch');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const tableRows = document.querySelectorAll('#inventoryTableBody tr');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+
+            tableRows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                const statusBadge = row.cells[3].querySelector('.badge');
+                let status = '';
+                
+                if (statusBadge.classList.contains('active')) status = 'in-stock';
+                else if (statusBadge.classList.contains('credit')) status = 'low-stock';
+                else if (statusBadge.classList.contains('inactive')) status = 'out-of-stock';
+
+                const matchesSearch = productName.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || activeFilter === status;
+
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterTable();
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

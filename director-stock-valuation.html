@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/manager-dashboard.css" />
+    <title>Stock Valuation - Director</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/director-dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="page container-fluid">
+      <!-- Sidebar Section -->
+      <div class="sidebar col">
+        <div class="logo-dash">
+          <img width="50" src="assets/images/KGL_logo.png" alt="" />
+          <p>Karibu Groceries LTD</p>
+        </div>
+        <div class="nav-menu">
+          <a href="director-dashboard.html" class="nav-item">
+            <img src="assets/icons/Rectangle 2804.svg" alt="" />
+            <span>Dashboard</span>
+          </a>
+          <a href="director-procurement-reports.html" class="nav-item">
+            <img src="assets/icons/report.svg" alt="" />
+            <span>Procurement Reports</span>
+          </a>
+          <a href="director-sales-reports.html" class="nav-item">
+            <img src="assets/icons/sales.svg" alt="" />
+            <span>Sales Reports</span>
+          </a>
+          <a href="director-credit-reports.html" class="nav-item">
+            <img src="assets/icons/checklist 1.svg" alt="" />
+            <span>Credit Reports</span>
+          </a>
+          <a href="director-stock-valuation.html" class="nav-item active">
+            <img src="assets/icons/store.svg" alt="" />
+            <span>Stock Valuation</span>
+          </a>
+          <a href="director-user-management.html" class="nav-item">
+            <img src="assets/icons/suppliers.svg" alt="" />
+            <span>User Management</span>
+          </a>
+          <div class="settings-logout">
+            <a href="#" class="nav-item">
+              <img src="assets/icons/settings.svg" alt="" />
+              <span>Settings</span></a
+            >
+            <a href="#" class="nav-item" id="logoutBtn">
+              <img src="assets/icons/log_out.svg" alt="" />
+              <span>Log Out</span></a
+            >
+          </div>
+        </div>
+      </div>
+      <!-- Main Content Section -->
+      <div class="main-content">
+        <!-- Header Section -->
+        <div class="header">
+          <h2 id="welcomeMsg">Stock Valuation <span>(Director)</span></h2>
+          <div class="header-icons">
+            <img src="assets/icons/bell.svg" alt="" />
+          </div>
+        </div>
+        <!-- Content Section -->
+        <div class="part1">
+          <!-- Stock Summary Cards -->
+          <div class="row mb-4 w-100">
+            <div class="col-md-6">
+              <div class="overview-card">
+                <h3 class="card-title-custom" style="margin-bottom: 10px;">Total Stock Value</h3>
+                <h2 class="card-value" style="color: #2e4734;">UGX 320.0M</h2>
+                <div class="progress mt-2" style="height: 10px;">
+                   <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                   <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="overview-card">
+                <h3 class="card-title-custom" style="margin-bottom: 10px; ">Low Stock Alerts (Global)</h3>
+                <h2 class="card-value" style="color: #a34b59;">8 Items</h2>
+                <span class=" small" style="color: #a34b59;">Below safety margin in 2 locations</span>
+              </div>
+            </div>
+          </div>
+
+          
+          <!-- Stock Table -->
+          <div class="low-stock-section w-100" style="background: white; border-radius: 12px; padding: 25px;">
+             <div class="section-header">
+                <h3>Global Stock Inventory</h3>
+             </div>
+             <table class="table table-hover mt-3">
+                <thead>
+                   <tr>
+                      <th>Product</th>
+                      <th>Maganjo (KG)</th>
+                      <th>Matugga (KG)</th>
+                      <th>Total Value</th>
+                      <th>Status</th>
+                   </tr>
+                </thead>
+                <tbody>
+                   <tr><td>Beans</td><td>12,500</td><td>8,200</td><td>UGX 41.4M</td><td><span class="badge bg-success">Adequate</span></td></tr>
+                   <tr><td>Maize Grains</td><td>45,000</td><td>20,000</td><td>UGX 97.5M</td><td><span class="badge bg-success">Adequate</span></td></tr>
+                   <tr><td>Cowpeas</td><td>1,200</td><td>500</td><td>UGX 4.2M</td><td><span class="badge bg-warning">Low Stock</span></td></tr>
+                   <tr><td>Soybeans</td><td>300</td><td>100</td><td>UGX 1.2M</td><td><span class="badge bg-danger">Critical</span></td></tr>
+                </tbody>
+             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/director-reports.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const cerealCtx = document.getElementById('stockCerealChart').getContext('2d');
+          new Chart(cerealCtx, {
+              type: 'bar',
+              data: {
+                  labels: ['Beans', 'Maize', 'Cowpeas', 'G-Nuts', 'Soybeans'],
+                  datasets: [{
+                      label: 'Maganjo (KG)',
+                      data: [12500, 45000, 1200, 3000, 300],
+                      backgroundColor: '#2ecc71'
+                  }, {
+                      label: 'Matugga (KG)',
+                      data: [8200, 20000, 500, 1500, 100],
+                      backgroundColor: '#3498db'
+                  }]
+              },
+              options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true }, x: { stacked: true } } }
+          });
+
+          const valueCtx = document.getElementById('stockValueChart').getContext('2d');
+          new Chart(valueCtx, {
+              type: 'doughnut',
+              data: {
+                  labels: ['Maize', 'Beans', 'Others'],
+                  datasets: [{
+                      data: [45, 30, 25],
+                      backgroundColor: ['#f1c40f', '#e67e22', '#95a5a6']
+                  }]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
+          });
+      });
+    </script>
+  </body>
+</html>

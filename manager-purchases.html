@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchases - Manager Dashboard</title>
+    <link rel="stylesheet" href="styles/manager-dashboard.css" />
+    <link rel="stylesheet" href="styles/client.css" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .purchases-table-container {
+        padding: 20px;
+        background: white;
+        margin: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page container-fluid">
+      <!-- Sidebar Section -->
+      <div class="sidebar col">
+        <div class="logo-dash">
+          <img width="50" src="assets/images/KGL_logo.png" alt="" />
+          <p>Karibu Groceries LTD</p>
+        </div>
+        <div class="nav-menu">
+          <a href="manager-dashboard.html" class="nav-item">
+            <img src="assets/icons/Rectangle 2804.svg" alt="" />
+            <span>Dashboard</span>
+          </a>
+          <a href="manager-inventory.html" class="nav-item">
+            <img src="assets/icons/inventory.svg" alt="" />
+            <span>Inventory</span>
+          </a>
+          <a href="manager-sales.html" class="nav-item">
+            <img src="assets/icons/sales.svg" alt="" />
+            <span>Sales</span>
+          </a>
+          <a href="manager-purchases.html" class="nav-item active">
+            <img src="assets/icons/checklist 1.svg" alt="" />
+            <span>Purchases</span>
+          </a>
+          <a href="manager-suppliers.html" class="nav-item">
+            <img src="assets/icons/suppliers.svg" alt="" />
+            <span>Suppliers</span>
+          </a>
+          <a href="manager-reports.html" class="nav-item">
+            <img src="assets/icons/report.svg" alt="" />
+            <span>Reports</span>
+          </a>
+          <a href="manager-store.html" class="nav-item">
+            <img src="assets/icons/store.svg" alt="" />
+            <span>Manage Store</span></a
+          >
+          <div class="settings-logout">
+            <a href="settings.html" class="nav-item">
+            <img src="assets/icons/settings.svg" alt="" />
+            <span>Settings</span></a
+          >
+          <a href="#" class="nav-item" id="logoutBtn">
+            <img src="assets/icons/log_out.svg" alt="" />
+            <span>Log Out</span></a
+          ></div>
+        </div>
+      </div>
+      <!-- Main Content Section -->
+      <div class="main-content">
+        <!-- Header Section -->
+        <div class="header">
+          <h2 id="welcomeMsg">User <span>(Role)</span></h2>
+          <div class="header-icons">
+            <img src="assets/icons/bell.svg" alt="" />
+            <img src="assets/icons/suppliers.svg" alt="" />
+          </div>
+        </div>
+        <!-- Content Section -->
+        <div class="main-content-body">
+          <div style="margin-top: 20px; margin-left: 40px;">
+            <h3 style="color: #174e36;">Procurement Records</h3>
+                
+              </div>
+            <div class="tabal-header d-flex align-items-center justify-content-between">
+              <button
+                        class="gold-btn"
+                        style="height: 50px"
+                        onclick="fetchModal('modal/procurement.html')"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addPurchasesModal"
+                    >
+                        Add New Procurement
+                    </button>
+                <div class="filter-buttons d-flex align-items-center">
+                    <input type="text" id="purchasesSearch" placeholder="Search purchase..." class="search-input" />
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="received">Received</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <input type="date" class="filter-btn" style="padding: 4px;" />
+                </div>
+            </div>
+
+            <div class="purchases-table-container">
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th>Purchase ID</th>
+                            <th>Date</th>
+                            <th>Supplier</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Total Cost</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchasesTableBody">
+                        <tr data-status="received">
+                            <td>#PUR-501</td>
+                            <td>2024-03-22</td>
+                            <td>Farm Direct Ltd</td>
+                            <td>Grain Maize</td>
+                            <td>1000 kg</td>
+                            <td>UGX 1,500,000</td>
+                            <td><span class="badge active">Received</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-status="pending">
+                            <td>#PUR-502</td>
+                            <td>2024-03-23</td>
+                            <td>Village Farmers Co.</td>
+                            <td>Beans</td>
+                            <td>500 kg</td>
+                            <td>UGX 800,000</td>
+                            <td><span class="badge credit">Pending</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <span class="btn-view">View</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-container"></div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/procurement.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const session = JSON.parse(localStorage.getItem("currentSession"));
+        if (session) {
+          const welcomeMsg = document.getElementById("welcomeMsg");
+          welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
+        } else {
+           window.location.href = "login.html";
+        }
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                localStorage.removeItem("currentSession");
+                window.location.href = "login.html";
+            });
+        }
+
+        // Purchases Search and Filter Logic
+        const searchInput = document.getElementById('purchasesSearch');
+        const filterBtns = document.querySelectorAll('.filter-btn:not([type="date"])');
+        const tableRows = document.querySelectorAll('#purchasesTableBody tr');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                const status = row.getAttribute('data-status');
+
+                const matchesSearch = rowText.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || activeFilter === status;
+
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', filterTable);
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.getAttribute('data-filter')) {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterTable();
+                }
+            });
+        });
+      });
+
+      // Fetch modal helper
+      function fetchModal(modalPath) {
+        fetch(modalPath)
+          .then(res => res.text())
+          .then(data => {
+            document.getElementById("modal-container").innerHTML = data;
+          })
+          .catch(err => console.error("Modal load error:", err));
+      }
+    </script>
+  </body>
+</html>
