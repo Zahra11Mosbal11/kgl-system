@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const session = JSON.parse(localStorage.getItem("currentSession"));
 
   if (!session || !session.username || session.role !== "Director") {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("currentSession");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     });
   }
 });

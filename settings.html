@@ -174,7 +174,7 @@
         const session = JSON.parse(localStorage.getItem("currentSession"));
         
         if (!session || !session.username) {
-          window.location.href = "login.html";
+          window.location.href = "index.html";
           return;
         }
 
@@ -207,7 +207,7 @@
           logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
             localStorage.removeItem("currentSession");
-            window.location.href = "login.html";
+            window.location.href = "index.html";
           });
         }
       });

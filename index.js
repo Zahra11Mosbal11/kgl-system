@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '.')));
 
 // Routes (Placeholder)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

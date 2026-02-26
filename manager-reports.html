@@ -135,7 +135,7 @@
           const welcomeMsg = document.getElementById("welcomeMsg");
           welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
         } else {
-           window.location.href = "login.html";
+           window.location.href = "index.html";
         }
 
         const logoutBtn = document.getElementById("logoutBtn");
@@ -143,7 +143,7 @@
             logoutBtn.addEventListener("click", (e) => {
                 e.preventDefault();
                 localStorage.removeItem("currentSession");
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             });
         }
       });

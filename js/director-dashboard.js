@@ -135,11 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Simple role check to ensure only Directors access this
     if (session.role !== "Director") {
       // In a real app, you'd redirect to the correct dashboard
-      // window.location.href = "login.html";
+      window.location.href = "index.html";
       console.log("Access Warning: Not a Director");
     }
   } else {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 
   const logoutBtn = document.getElementById("logoutBtn");
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("currentSession");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     });
   }
 });
