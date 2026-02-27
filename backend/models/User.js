@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   },
   password: {
     type: String,
@@ -13,31 +14,43 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Manager', 'Sales Agent', 'Director'],
+    enum: ['manager', 'sales_agent', 'director'],
+    required: true
+  },
+  fullName: {
+    type: String,
     required: true
   },
   branch: {
     type: String,
+    enum: ['Maganjo', 'Matugga'],
     required: true
   },
-  contact: {
+  phone: {
     type: String,
-    required: true
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^[0-9]{10}$/.test(v);
+      }
+    }
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true });
 
-// Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function(enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// Encrypt password using bcrypt
+// encrypt password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
+
+// compare candidate password with stored hash
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 module.exports = mongoose.model('User', userSchema);
