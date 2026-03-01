@@ -1,7 +1,7 @@
 
   <img width="200" align-items="center" alt="KGL_logo" src="https://github.com/user-attachments/assets/bf937cad-7e33-4acb-b491-eb51ad98c525" />  
 
-#  KJL – Karibu Groceries LTD Management System
+#  KGL – Karibu Groceries LTD Management System
 
 A modern web-based management system for Karibu Groceries LTD, designed to help manage products, sales, and stock efficiently with a clean dashboard interface.
 
