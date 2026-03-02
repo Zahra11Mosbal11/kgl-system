@@ -1,0 +1,61 @@
+<!-- View Client Modal -->
+<div class="modal fade" id="clientDetailsModal" tabindex="-1" aria-labelledby="clientDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="clientDetailsModalLabel">
+          <i class="fas fa-user-circle me-2"></i>Client Details
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="clientInfo">
+          <div class="row mb-4">
+            <div class="col-md-6 border-end">
+              <h6 class="text-muted text-uppercase small fw-bold">Basic Information</h6>
+              <div class="mb-2"><strong>Name:</strong> <span id="viewName">-</span></div>
+              <div class="mb-2"><strong>Phone:</strong> <span id="viewContact">-</span></div>
+              <div class="mb-2"><strong>Location:</strong> <span id="viewLocation">-</span></div>
+              <div class="mb-2"><strong>National ID:</strong> <span id="viewNIN">-</span></div>
+            </div>
+            <div class="col-md-6 ps-md-4">
+              <h6 class="text-muted text-uppercase small fw-bold">Financial Summary</h6>
+              <div class="mb-2"><strong>Total Debt:</strong> <span id="viewTotalDebt" class="text-danger fw-bold">0 UGX</span></div>
+              <div class="mb-2"><strong>Branch:</strong> <span id="viewBranch">-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="mt-4">
+          <h6 class="text-muted text-uppercase small fw-bold mb-3">Transaction History</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover border">
+              <thead class="bg-light">
+                <tr>
+                  <th>Date</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody id="clientHistoryBody">
+                <tr>
+                  <td colspan="5" class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                    Loading transactions...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

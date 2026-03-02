@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/login.css" />
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- his is the login page -->
+    <div class="container">
+      <div class="row justify-content-center">
+        <!-- Login Form Section -->
+        <div class="form-box col-md-5 col-lg-4 ">
+          <div class="logo-text">
+            <img width="50" src="assets/images/KGL_logo.png" alt="" />
+            <h2>Log in to your account</h2>
+            <p class="welcome-text">Welcome back! Please enter your details.</p>
+          </div>
+          <form id="loginForm">
+            <div>
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control mb-3"
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+            <div>
+              <label for="password" class="form-label">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control mb-3"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <div class="mb-3 align-items-center">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="remember"
+                name="remember"
+              />
+              <label class="form-check-label" for="remember">
+                Remember for 30 days
+              </label>
+              <a href="#" class="forgot-link"> Forgot password? </a>
+            </div>
+            <button type="submit" class="sing-butn">Sign in</button>
+          </form>
+        </div>
+        <!-- Logo Section -->
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+      //  Toast function
+      function showToast(message, type) {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+    
+        document.body.appendChild(toast);
+    
+        setTimeout(() => toast.classList.add("show"), 100);
+    
+        setTimeout(() => {
+          toast.classList.remove("show");
+          setTimeout(() => toast.remove(), 400);
+        }, 3000);
+      }
+    
+      const loginForm = document.getElementById("loginForm");
+    
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+    
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+    
+        if (!username || !password) {
+          showToast("Please enter both username and password.", "error");
+          return;
+        }
+
+        try {
+            const response = await api.post('/users/login', { username, password });
+            
+            if (response.success) {
+                const session = {
+                    username: response.user.username,
+                    role: response.user.role,
+                    token: response.token,
+                    fullName: response.user.fullName,
+                    branch: response.user.branch
+                };
+            
+                localStorage.setItem("currentSession", JSON.stringify(session));
+            
+                showToast("Login successful!", "success");
+            
+                setTimeout(() => {
+                    if (response.user.role === 'manager') {
+                        window.location.href = "manager-dashboard.html";
+                    } else if (response.user.role === 'sales_agent') {
+                        window.location.href = "sales-agent-dashboard.html";
+                    } else if (response.user.role === 'director') {
+                        window.location.href = "director-dashboard.html";
+                    } else {
+                        window.location.href = "manager-dashboard.html";
+                    }
+                }, 1000);
+            } else {
+                showToast(response.error || "Login failed", "error");
+            }
+        } catch (error) {
+            showToast(error.message || "An error occurred during login", "error");
+            console.log(error);
+        }
+      });
+    </script>
+    
+    
+  </body>
+</html>

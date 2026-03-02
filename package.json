@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "seed": "node backend/seed.js",

@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // MongoDB Connection
 connectDB();
@@ -48,16 +48,7 @@ app.use('/suppliers', supplierRoutes);
 
 // Home route
 app.get('/', (req, res) => {
-  res.json({
-    message: 'Karibu Groceries LTD API',
-    version: '1.0.0',
-    documentation: '/api-docs',
-    endpoints: {
-      procurement: '/procurement',
-      sales: '/sales',
-      users: '/users'
-    }
-  });
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Error handling

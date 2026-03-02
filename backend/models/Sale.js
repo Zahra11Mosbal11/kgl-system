@@ -20,6 +20,12 @@ const cashSaleSchema = new mongoose.Schema({
     required: true,
     minlength: 2
   },
+  contact: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 10
+  },
   salesAgentName: {
     type: String,
     required: true,

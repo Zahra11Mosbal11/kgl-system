@@ -1,0 +1,160 @@
+<div class="modal fade sales-modal" id="addSalesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-cash-register me-2"></i>Add New Sale
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form id="addSalesForm">
+          <div id="formErrors" class="alert alert-danger d-none"></div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="saleDate">Sales Date & Time</label>
+                <input type="datetime-local" id="saleDate" name="date" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="salesAgentName">Sales Person</label>
+                <input type="text" id="salesAgentName" name="salesAgentName" class="form-control" placeholder="Enter staff name" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="buyerName">Customer Name</label>
+                <input type="text" id="buyerName" name="buyerName" class="form-control" placeholder="Search or enter customer name" list="clientList" required>
+                <datalist id="clientList"></datalist>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="contact">Customer Phone</label>
+                <input type="tel" id="contact" name="contact" class="form-control" placeholder="07XXXXXXXX" minlength="10" maxlength="10" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credit Only Fields (Hidden by default) -->
+          <div id="creditFields" class="d-none">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nationalId">National ID (NIN)</label>
+                  <input type="text" id="nationalId" name="nationalId" class="form-control" placeholder="CM12345678ABCD9E">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" id="location" name="location" class="form-control" placeholder="Enter customer location">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="dueDate">Due Date</label>
+                  <input type="date" id="dueDate" name="dueDate" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="produceName">Product Name</label>
+            <select id="produceName" name="produceName" class="form-control" required>
+              <option value="">Select a product...</option>
+            </select>
+            <small id="stockInfo" class="text-muted d-block mt-1">Available Stock: <span id="availableStock">0</span> Tonnes</small>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="tonnage">Quantity (Tonnes)</label>
+                <input type="number" id="tonnage" name="tonnage" class="form-control" step="0.01" required>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="unitPrice">Unit Price (UGX)</label>
+                <input type="number" id="unitPrice" name="unitPrice" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="discount">Discount (%)</label>
+                <input type="number" id="discount" name="discount" class="form-control" min="0" max="100" value="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="subtotal">Subtotal</label>
+                <input type="number" id="subtotal" name="subtotal" class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="tax">Tax (0%)</label>
+                <input type="number" id="tax" name="tax" class="form-control" readonly value="0">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="totalAmount">Total</label>
+                <input type="number" id="totalAmount" name="totalAmount" class="form-control" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentMethod">Payment Method</label>
+            <select id="paymentMethod" name="paymentMethod" class="form-control">
+              <option value="Cash">Cash</option>
+              <option value="Mobile Money">Mobile Money</option>
+              <option value="Card">Card</option>
+              <option value="Credit">Credit</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" form="addSalesForm" class="gold-btn" id="saveSaleBtn">
+          <i class="fas fa-save me-2"></i>Save Sale
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+

@@ -294,14 +294,15 @@ router.post("/credit", requireAuth, async (req, res) => {
  *                 error:
  *                   type: string
  */
-router.get("/", requireAuth, requireSalesAgent, async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
-    const cashSales = await CashSale.find({
-      branch: req.user.branch,
-    }).sort({ date: -1 });
-    const creditSales = await CreditSale.find({
-      branch: req.user.branch,
-    }).sort({ date: -1 });
+    let query = {};
+    if (req.user.role === 'sales_agent') {
+      query.branch = req.user.branch;
+    }
+
+    const cashSales = await CashSale.find(query).sort({ date: -1 });
+    const creditSales = await CreditSale.find(query).sort({ date: -1 });
 
     res.status(200).json({
       success: true,
