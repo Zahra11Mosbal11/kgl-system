@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             tableBody.appendChild(tr);
         });
+
+        // Remove loading state
+        document.querySelector('.sales-table-container')?.classList.remove('loading');
     }
 
     // Initial Load
@@ -139,6 +142,21 @@ window.fetchModal = function(modalPath) {
             const container = document.getElementById("modal-container");
             if (container) {
                 container.innerHTML = data;
+                
+                // Initialize the modal programmatically
+                const modalElement = document.getElementById('addSalesModal');
+                if (modalElement) {
+                    // initSalesForm is now globally available via sales-form.js
+                    if (typeof initSalesForm === 'function') {
+                        initSalesForm();
+                    } else {
+                        console.error("initSalesForm not found! Make sure sales-form.js is loaded.");
+                    }
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                } else {
+                    console.error("Modal element #addSalesModal not found in fetched content");
+                }
             }
         })
         .catch(err => console.error("Modal load error:", err));

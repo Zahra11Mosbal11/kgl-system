@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableBody.innerHTML = '';
 
         if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No inventory found for this branch.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">No inventory found for this branch.</td></tr>';
             return;
         }
 
@@ -58,11 +58,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 statusBadge = '<span class="badge active">In Stock</span>';
             }
 
-            const lastRestocked = item.lastUpdated ? new Date(item.lastUpdated).toLocaleDateString() : 'N/A';
+            const lastRestocked = item.lastUpdated ? new Date(item.lastUpdated).toLocaleDateString() : '-';
 
             tr.innerHTML = `
                 <td>${item.produceName}</td>
-                <td>${item.produceType || 'N/A'}</td>
                 <td>${item.quantity.toLocaleString()} kg</td>
                 <td>${statusBadge}</td>
                 <td>${lastRestocked}</td>
@@ -75,6 +74,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             tableBody.appendChild(tr);
         });
+
+        // Remove loading state
+        document.querySelector('.inventory-table-container')?.classList.remove('loading');
     }
 
     // Search and Filter Logic

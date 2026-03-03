@@ -82,8 +82,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Product Summary
             cards[2].querySelectorAll('.stat-value')[0].textContent = branchSuppliers.length.toLocaleString();
-            const categories = [...new Set(branchInventory.map(i => i.produceName))];
-            cards[2].querySelectorAll('.stat-value')[1].textContent = categories.length.toLocaleString();
+            const products = [...new Set(branchInventory.map(i => i.produceName))];
+            cards[2].querySelectorAll('.stat-value')[1].textContent = products.length.toLocaleString();
 
             // Purchase Overview
             cards[3].querySelectorAll('.stat-value')[0].textContent = branchPurchases.length.toLocaleString();
@@ -144,6 +144,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             }
         }
+
+        // Remove loading states
+        document.querySelectorAll('.stats-cards, .low-stock-section, .top-selling-section')
+            .forEach(el => el.classList.remove('loading'));
     }
 
     function drawCharts(data) {

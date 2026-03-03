@@ -1,5 +1,5 @@
 # Node modules (very important!)
-node_modules/
+node_modules/   
 
 # Logs
 logs/
@@ -22,6 +22,8 @@ build/
 *.exe
 *.iso
 
+
 # IDE files (optional)
 .vscode/
 .idea/
+seed.js

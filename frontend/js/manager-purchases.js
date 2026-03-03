@@ -70,6 +70,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             tableBody.appendChild(tr);
         });
+
+        // Remove loading state
+        document.querySelector('.purchases-table-container')?.classList.remove('loading');
     }
 
     // Initial Load
@@ -134,26 +137,21 @@ window.fetchModal = function(modalPath) {
             const container = document.getElementById("modal-container");
             if (container) {
                 container.innerHTML = data;
-                // Re-calculate totals if quantity/price change
-                const qtyInput = document.getElementById("quantity");
-                const priceInput = document.getElementById("price");
-                if (qtyInput && priceInput) {
-                    const calc = () => {
-                        const q = Number(qtyInput.value);
-                        const p = Number(priceInput.value);
-                        const total = document.getElementById("total");
-                        if (total) total.value = (q && p) ? (q * p).toFixed(0) : "";
-                    };
-                    qtyInput.addEventListener('input', calc);
-                    priceInput.addEventListener('input', calc);
-                }
                 
-                // Set default date to today
-                const dateInput = document.getElementById("purchaseDate");
-                const deliveryInput = document.getElementById("deliveryDate");
-                const today = new Date().toISOString().split('T')[0];
-                if (dateInput) dateInput.value = today;
-                if (deliveryInput) deliveryInput.value = today;
+                // Initialize the modal programmatically
+                const modalElement = document.getElementById('addPurchasesModal');
+                if (modalElement) {
+                    // initProcurementForm is now globally available via procurement-form.js
+                    if (typeof initProcurementForm === 'function') {
+                        initProcurementForm();
+                    } else {
+                        console.error("initProcurementForm not found! Make sure procurement-form.js is loaded.");
+                    }
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                } else {
+                    console.error("Modal element #addPurchasesModal not found in fetched content");
+                }
             }
         })
         .catch(err => console.error("Modal load error:", err));

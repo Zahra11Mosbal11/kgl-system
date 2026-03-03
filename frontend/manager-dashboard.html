@@ -79,18 +79,18 @@
           <div>
             <!-- Stats Cards Section -->
             <div class="row">
-              <div class="stats-cards" >
+              <div class="stats-cards loading" >
                 <div class="stat-card">
                   <h3 style="color: #d4a61d">Inventory Summary</h3>
                   <div class="icon-overview">
                     <div>
                       <p class="stat-desc" >
-                        <span class="stat-value" id="invInHand">0</span> Quantity in Hand
+                        <span class="stat-value" id="invInHand">-</span> Quantity in Hand
                       </p>
                     </div>
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value" id="invToReceive">0</span> To be received
+                        <span class="stat-value" id="invToReceive">-</span> To be received
                       </p>
                     </div>
                   </div>
@@ -101,12 +101,12 @@
                   <div class="icon-overview">
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value">200</span> Sales
+                        <span class="stat-value">-</span> Sales
                       </p>
                     </div>
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value">200,000UGX</span> Cost
+                        <span class="stat-value">- UGX</span> Cost
                       </p>
                     </div>
                   </div>
@@ -114,18 +114,18 @@
               </div>
             </div>
             <div class="row">
-              <div class="stats-cards">
+              <div class="stats-cards loading">
                 <div class="stat-card">
                   <h3 style="color: #7b1fa2;">Product Summary</h3>
                   <div class="icon-overview">
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value">30</span> Suppliers
+                        <span class="stat-value">-</span> Suppliers
                       </p>
                     </div>
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value">10</span> Categories
+                        <span class="stat-value">-</span> Products
                       </p>
                     </div>
                   </div>
@@ -136,12 +136,12 @@
                   <div class="icon-overview">
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value">200</span> Purchase
+                        <span class="stat-value">-</span> Purchase
                       </p>
                     </div>
                     <div>
                       <p class="stat-desc">
-                        <span class="stat-value"> 800,000 UGX</span> Cost
+                        <span class="stat-value">- UGX</span> Cost
                       </p>
                     </div>
                   </div>
@@ -150,51 +150,23 @@
             </div>
           </div>
           <!--low stok and stats cart -->
-          <div class="low-stock-section">
-            <div class="section-header">
-              <h3>Low Quantity Stock</h3>
-              <a href="#" class="see-all-btn">See All</a>
-            </div>
-
-            <div class="low-stock-items">
-              <div class="stock-item">
-                <div class="stock-icon">
-                  <img width="" src="" alt="" />
-                </div>
-                <div class="stock-details">
-                  <h4>Grain Maize</h4>
-                  <p>Remaining Quantity : 1000 kg</p>
-                </div>
+            <div class="low-stock-section loading">
+              <div class="section-header">
+                <h3>Low Quantity Stock</h3>
+                <a href="#" class="see-all-btn">See All</a>
               </div>
 
-              <div class="stock-item">
-                <div class="stock-icon">
-                  <img width="" src="" alt="" />
-                </div>
-                <div class="stock-details">
-                  <h4>G-nuts</h4>
-                  <p>Remaining Quantity : 5000 kg</p>
-                </div>
-              </div>
-
-              <div class="stock-item">
-                <div class="stock-icon">
-                  <img width="" src="" alt="" />
-                </div>
-                <div class="stock-details">
-                  <h4>Soybeans</h4>
-                  <p>Remaining Quantity : 1000 kg</p>
-                </div>
+              <div class="low-stock-items">
+                <!-- Data will be injected here -->
               </div>
             </div>
-          </div>
         </div>
         <div class="part2">
           <div class="chart-container">
             <div id="chart_div" style="width: 550px; height: 300px"></div>
           </div>
           <!-- Top Selling Stock Section -->
-          <div class="top-selling-section">
+          <div class="top-selling-section loading">
             <div class="section-header">
               <h3>Top Selling Stock</h3>
               <a href="#" class="see-all-btn">See All</a>
@@ -209,25 +181,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Beans</td>
-                  <td>1500 kg</td>
-                  <td>200 kg</td>
-                  <td>$2000</td>
-                </tr>
-                <tr>
-                  <td>Grain Maize</td>
-                  <td>1300 kg</td>
-                  <td>200 kj</td>
-                  <td>$1500</td>
-                </tr>
-                <tr>
-                  <td>Cow peas</td>
-                  <td>1000 kg</td>
-                  <td>150 kg</td>
-                  <td>$1800</td>
-                </tr>
-                
+                <!-- Data will be injected here -->
               </tbody>
             </table>
           </div>

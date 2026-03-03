@@ -11,7 +11,7 @@
     <div class="container">
       <h1>New Product</h1>
 
-      <form d="procurementForm" action="">
+      <form id="procurementForm" action="">
         <div class="lab">
           <label>Supplier Name</label>
           <input type="text" id="supplierName" required />
@@ -19,7 +19,8 @@
 
         <div class="lab">
           <label>Supplier Contact</label>
-          <input type="tel" id="supplierContact" required />
+          <input type="tel" id="supplierContact" placeholder="e.g., 0712345678" required />
+          <small class="text-muted" style="font-size: 0.8em; color: #666; display: block; margin-top: 4px;">Must be exactly 10 digits</small>
         </div>
 
         <div class="lab">
@@ -27,26 +28,14 @@
           <input type="date" id="purchaseDate" required />
         </div>
 
-        <div class="lab">
-          <label>Invoice Number</label>
-          <input type="text" id="invoiceNumber" required />
-        </div>
+
 
         <div class="lab">
           <label>Product Name</label>
           <input type="text" id="ProductName" required />
         </div>
 
-        <div class="lab">
-          <label>Product Category</label>
-          <select id="Category" required>
-            <option value="Electronics">Electronics</option>
-            <option value="Furniture">Furniture</option>
-            <option value="Stationery">Stationery</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+
 
         <div class="lab">
           <label>Quantity</label>
@@ -121,6 +110,8 @@
       </form>
     </div>
 
+    <script src="js/api.js"></script>
+    <script src="js/procurement-form.js"></script>
     <script src="js/procurement.js"></script>
   </body>
 </html>

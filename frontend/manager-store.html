@@ -112,7 +112,7 @@
         </div>
         <!-- Content Section -->
         <div class="main-content-body">
-            <div class="store-management-container">
+            <div class="store-management-container loading">
                 <div class="management-section">
                     <h3>Store Details</h3>
                     <div class="row">
@@ -147,18 +147,7 @@
                 <div class="management-section">
                     <h3>Product Categories</h3>
                     <div class="store-grid">
-                        <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                            <span>Cereals</span>
-                            <button class="btn btn-sm btn-outline-danger">Remove</button>
-                        </div>
-                        <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                            <span>Legumes</span>
-                            <button class="btn btn-sm btn-outline-danger">Remove</button>
-                        </div>
-                        <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                            <span>Grains</span>
-                            <button class="btn btn-sm btn-outline-danger">Remove</button>
-                        </div>
+                        <!-- Data will be injected here -->
                         <button class="management-btn">+ Add Category</button>
                     </div>
                 </div>
@@ -187,6 +176,11 @@
                 window.location.href = "index.html";
             });
         }
+
+        // Remove loading state
+        setTimeout(() => {
+            document.querySelector('.store-management-container')?.classList.remove('loading');
+        }, 500); // Small delay to simulate loading
       });
     </script>
   </body>

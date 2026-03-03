@@ -87,14 +87,12 @@
                 </div>
             <div class="tabal-header d-flex align-items-center justify-content-between">
                 <button
-                        class="gold-btn"
-                        style="height: 50px"
-                        onclick="fetchModal('modal/sales.html')"
-                        data-bs-toggle="modal"
-                        data-bs-target="#addSalesModal"
-                    >
-                        Add New Sale
-                    </button>
+              class="gold-btn"
+              style="height: 50px"
+              onclick="fetchModal('modal/sales.html')"
+            >
+              Add New Sale
+            </button>
                 
                 <div class="filter-buttons d-flex align-items-center">
                     <input type="text" id="salesSearch" placeholder="Search sale..." class="search-input" />
@@ -106,7 +104,7 @@
             </div>
             </div>
 
-            <div class="sales-table-container">
+            <div class="sales-table-container loading">
                 <table class="clients-table">
                     <thead>
                         <tr>
@@ -120,32 +118,7 @@
                         </tr>
                     </thead>
                     <tbody id="salesTableBody">
-                        <tr data-status="cash">
-                            <td>#REC-8902</td>
-                            <td>2024-03-22</td>
-                            <td>John Mugisha</td>
-                            <td>Grain Maize (100 kg)</td>
-                            <td>UGX 250,000</td>
-                            <td><span class="badge active">Paid</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <span class="btn-view">View</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-status="credit">
-                            <td>#REC-8903</td>
-                            <td>2024-03-21</td>
-                            <td>Sarah Nakitende</td>
-                            <td>Beans (50 kg)</td>
-                            <td>UGX 150,000</td>
-                            <td><span class="badge credit">Credit</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <span class="btn-view">View</span>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Data will be injected here -->
                     </tbody>
                 </table>
             </div>
@@ -157,6 +130,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/sales-form.js"></script>
     <script src="js/manager-sales.js"></script>
   </body>
 </html>

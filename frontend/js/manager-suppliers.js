@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const tr = document.createElement('tr');
             tr.setAttribute('data-status', item.status?.toLowerCase() || 'active');
             
-            const lastDelivery = item.lastDelivery ? new Date(item.lastDelivery).toLocaleDateString() : 'N/A';
+            const lastDelivery = item.lastDelivery ? new Date(item.lastDelivery).toLocaleDateString() : '-';
             const statusClass = item.status === 'Active' ? 'active' : 'inactive';
 
             tr.innerHTML = `
@@ -61,9 +61,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p>ID: ${item._id.slice(-6).toUpperCase()}</p>
                     </div>
                 </td>
-                <td>${item.contactPerson || 'N/A'}</td>
+                <td>${item.contactPerson || '-'}</td>
                 <td>${item.contact}</td>
-                <td>${(item.productsSupplied || []).join(', ') || 'N/A'}</td>
+                <td>${(item.productsSupplied || []).join(', ') || '-'}</td>
                 <td><span class="badge ${statusClass}">${item.status || 'Active'}</span></td>
                 <td>${lastDelivery}</td>
                 <td>
@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             tableBody.appendChild(tr);
         });
+
+        // Remove loading state
+        document.querySelector('.table-section')?.classList.remove('loading');
     }
 
     // Initial Load
@@ -112,4 +115,25 @@ document.addEventListener("DOMContentLoaded", async () => {
             filterTable();
         });
     });
+
+    // Global fetchModal function
+    window.fetchModal = function(modalPath) {
+        fetch(modalPath)
+            .then(res => res.text())
+            .then(data => {
+                const container = document.getElementById("modal-container");
+                if (container) {
+                    container.innerHTML = data;
+                    const modalElement = document.getElementById('addSupplierModal');
+                    if (modalElement) {
+                        if (typeof initSupplierForm === 'function') {
+                            initSupplierForm();
+                        }
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+                    }
+                }
+            })
+            .catch(err => console.error("Modal load error:", err));
+    };
 });

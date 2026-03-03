@@ -354,3 +354,42 @@
   background-color: #e2c173;
   color: white;
 }
+
+/* Loading States */
+.loading {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loading .stat-value,
+.loading h4,
+.loading p,
+.loading td {
+  color: transparent !important;
+  background: #f0f0f0;
+  border-radius: 4px;
+  display: inline-block;
+  min-width: 50px;
+  min-height: 1em;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loading .stock-icon {
+  background: #f0f0f0 !important;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
