@@ -23,6 +23,9 @@ const supplierSchema = new mongoose.Schema({
     type: String,
     enum: ['Maganjo', 'Matugga'],
     required: true
+  },
+  lastDelivery: {
+    type: Date
   }
 }, { timestamps: true });
 

@@ -70,26 +70,26 @@
         <!-- Content Section -->
         <div class="part1">
           <!-- Stock Summary Cards -->
-          <div class="row mb-4 w-100">
+          <div class="row mb-4 w-100" style="margin-bottom: 20px;">
             <div class="col-md-6">
               <div class="overview-card">
                 <h3 class="card-title-custom" style="margin-bottom: 10px;">Total Stock Value</h3>
-                <h2 class="card-value" style="color: #2e4734;">UGX 320.0M</h2>
-                <div class="progress mt-2" style="height: 10px;">
-                   <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                   <div class="progress-bar bg-info" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                <h2 class="card-value" id="totalStockValue" style="color: #2e4734;">UGX ...</h2>
+                <div class="progress mt-2" id="stockProgressBar" style="height: 10px;">
+                   <div class="progress-bar bg-success" id="maganjoBar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                   <div class="progress-bar bg-info" id="matuggaBar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="overview-card">
                 <h3 class="card-title-custom" style="margin-bottom: 10px; ">Low Stock Alerts (Global)</h3>
-                <h2 class="card-value" style="color: #a34b59;">8 Items</h2>
+                <h2 class="card-value" id="lowStockAlertCount" style="color: #a34b59;">... Items</h2>
                 <span class=" small" style="color: #a34b59;">Below safety margin in 2 locations</span>
               </div>
             </div>
           <!-- Charts Row -->
-          <div class="row mb-4 w-100">
+          <div class="row mb-4 w-100" style="margin-top: 20px;">
              <div class="col-md-7">
                 <div class="chart-card" style="background: white; border-radius: 12px; padding: 25px; height: 350px;">
                    <h3>Branch Stock Distribution</h3>
@@ -125,7 +125,7 @@
                    </tr>
                 </thead>
                 <tbody id="stockTableBody">
-                   <!-- Dynamic content -->
+                    <tr><td colspan="5" class="text-center py-4">Loading stock inventory...</td></tr>
                 </tbody>
              </table>
           </div>

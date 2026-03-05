@@ -21,6 +21,7 @@ function initProcurementForm() {
     const priceInput = document.getElementById("price");
     const totalInput = document.getElementById("total");
     const sellingPriceInput = document.getElementById("sellingPrice");
+    const produceTypeInput = document.getElementById("produceType");
     const errorMsg = document.getElementById("errorMsg");
     const formErrors = document.getElementById("formErrors");
 
@@ -66,6 +67,7 @@ function initProcurementForm() {
         const sellingPrice = sellingPriceInput ? Number(sellingPriceInput.value) : 0;
         const total = Number(totalInput.value);
         const date = dateInput.value;
+        const produceType = produceTypeInput ? produceTypeInput.value.trim() : "";
         
         const paymentMethod = form.querySelector('input[name="payment_method"]:checked');
         const paymentStatus = form.querySelector('input[name="payment_status"]:checked');
@@ -76,6 +78,11 @@ function initProcurementForm() {
         if (!/^[0-9]{10}$/.test(contact)) errors.push("Contact number must be exactly 10 digits (e.g., 0712345678)");
         if (qty < 100) errors.push("Quantity must be at least 100 kg");
         if (total < 10000) errors.push("Total cost must be at least 10,000 UGX");
+        
+        // Produce Type Validation (alphabets only, >= 2 chars)
+        if (!/^[A-Za-z\s]{2,}$/.test(produceType)) {
+            errors.push("Produce type must be alphabets only and at least 2 characters");
+        }
         
         if (sellingPriceInput && sellingPrice <= unitPrice) {
             errors.push("Selling price must be greater than unit cost");
@@ -102,7 +109,7 @@ function initProcurementForm() {
         
         const payload = {
             produceName: product,
-            produceType: "Common", // Set to a default since it was removed from UI
+            produceType: produceType,
             tonnage: qty,
             cost: total,
             dealerName: supplier,

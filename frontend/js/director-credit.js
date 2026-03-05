@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const isOverdue = dueDate && dueDate < new Date() && item.paymentStatus !== 'Completed';
             
             tr.innerHTML = `
-                <td>${item.clientName}</td>
+                <td>${item.buyerName}</td>
                 <td>UGX ${item.amountDue.toLocaleString()}</td>
-                <td>${dueDate ? dueDate.toLocaleDateString() : 'N/A'}</td>
+                <td>${dueDate ? dueDate.toLocaleDateString() : '-'}</td>
                 <td>${item.branch}</td>
                 <td>
                     ${isOverdue ? '<button class="btn btn-sm btn-danger">Overdue</button>' : '<button class="btn btn-sm btn-outline-primary">Follow Up</button>'}

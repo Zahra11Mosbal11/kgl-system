@@ -50,26 +50,32 @@ router.post('/login', async (req, res) => {
     }
     
     // use token for authentication instead of session
-    if(user){
-      let _user = {
+    if (user) {
+      const _user = {
         id: user._id,
         username: user.username,
         role: user.role,
         branch: user.branch
       };
-      
-    const token = jwt.sign(_user, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({
-      success: true,
-      message: "logged in successfully",
-      token, 
-      user: {
-        username: user.username,
-        role: user.role,
-        fullName: user.fullName,
-        branch: user.branch
-      }
-    });}
+
+      // Update online status
+      user.isOnline = true;
+      user.lastLogin = Date.now();
+      await user.save();
+
+      const token = jwt.sign(_user, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.json({
+        success: true,
+        message: "logged in successfully",
+        token,
+        user: {
+          username: user.username,
+          role: user.role,
+          fullName: user.fullName,
+          branch: user.branch
+        }
+      });
+    }
     
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -86,8 +92,17 @@ router.post('/login', async (req, res) => {
  *       200:
  *         description: logged out successfully
  */
-router.post('/logout', (req, res) => {
-  res.json({ success: true, message: 'logged out successfully (clear your token on the client)' });
+router.post('/logout', async (req, res) => {
+  try {
+    // If the client sends the username or we have middleware to identify them
+    const { username } = req.body;
+    if (username) {
+      await User.findOneAndUpdate({ username }, { isOnline: false });
+    }
+    res.json({ success: true, message: 'logged out successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 /**
@@ -125,7 +140,7 @@ router.post('/logout', (req, res) => {
  *       403:
  *         description: unauthorized
  */
-router.post('/', requireManager, async (req, res) => {
+router.post('/', requireRoles(['manager', 'director']), async (req, res) => {
   try {
     const { username, password, role, fullName, branch, phone } = req.body;
     

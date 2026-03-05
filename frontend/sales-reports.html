@@ -83,28 +83,7 @@
           <p>Karibu Groceries LTD</p>
         </div>
         <div class="nav-menu">
-          <a href="sales-agent-dashboard.html" class="nav-item">
-            <img src="assets/icons/Rectangle 2804.svg" alt="" />
-            <span>Dashboard</span>
-          </a>
-          <a href="client.html" class="nav-item">
-            <img src="assets/icons/suppliers.svg" alt="" />
-            <span>Clients</span>
-          </a>
-          <a href="sales-reports.html" class="nav-item active">
-            <img src="assets/icons/report.svg" alt="" />
-            <span>Reports</span>
-          </a>
-          <div class="settings-logout">
-            <a href="settings.html" class="nav-item">
-              <img src="assets/icons/settings.svg" alt="" />
-              <span>Settings</span></a
-            >
-            <a href="#" class="nav-item" id="logoutBtn">
-              <img src="assets/icons/log_out.svg" alt="" />
-              <span>Log Out</span></a
-            >
-          </div>
+          <!-- Sidebar items will be injected by sidebar-common.js -->
         </div>
       </div>
       <!-- Main Content Section -->
@@ -154,8 +133,8 @@
                               <label>Branch (Optional)</label>
                               <select id="branchFilter" class="form-select"  >
                                 <option value="all">All Branches</option>
-                                <option value="branch1">Branch 1</option>
-                                <option value="branch2">Branch 2</option>
+                                <option value="Maganjo">Maganjo</option>
+                                <option value="Matugga">Matugga</option>
                               </select>
                             </div>
                             
@@ -163,11 +142,6 @@
                               <label>Product (Optional)</label>
                               <select id="productFilter" class="form-select"  >
                                 <option value="all">All Products</option>
-                                <option value="beans">Beans</option>
-                                <option value="maize">Grain Maize</option>
-                                <option value="cowpeas">Cow peas</option>
-                                <option value="gnuts">G-nuts</option>
-                                <option value="soybeans">Soybeans</option>
                               </select>
                             </div>
                           </div>
@@ -205,7 +179,7 @@
               <thead>
                 <tr>
                   <th>Product</th>
-                  <th>Total Sold (KG)</th>
+                  <th>Total Sold (Tonnes)</th>
                   <th>Total Revenue</th>
                 </tr>
               </thead>
@@ -215,18 +189,13 @@
               </tbody>
             </table>
           </div>
-          <!-- Filters -->
-          <div style="margin: 30px">
-          <button class="gold-btn" style="height: 40px" onclick="generateReport()">
-            Generate Report
-          </button>          
-          </div>
         </div>
       </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/sidebar-common.js"></script>
     <script src="js/sales-reports.js"></script>
         
   </body>

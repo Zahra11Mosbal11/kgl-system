@@ -34,15 +34,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function updateStockUI(data) {
         // Summary Cards
-        const totalValueCard = document.querySelector('.card-value');
+        const totalValueCard = document.getElementById('totalStockValue');
         if (totalValueCard) {
             totalValueCard.textContent = `UGX ${(data.totalValuation.totalCostValue / 1000000).toFixed(1)}M`;
         }
 
-        const lowStockCard = document.querySelectorAll('.card-value')[1];
+        const lowStockCard = document.getElementById('lowStockAlertCount');
         if (lowStockCard) {
             const lowStockItems = data.inventory.filter(i => i.quantity < 500);
             lowStockCard.textContent = `${lowStockItems.length} Items`;
+        }
+
+        // Progress Bars
+        const maganjoBar = document.getElementById('maganjoBar');
+        const matuggaBar = document.getElementById('matuggaBar');
+        if (maganjoBar && matuggaBar && data.totalValuation.totalCostValue > 0) {
+            const maganjoPercent = (data.branchBreakdown.Maganjo.costValue / data.totalValuation.totalCostValue) * 100;
+            const matuggaPercent = (data.branchBreakdown.Matugga.costValue / data.totalValuation.totalCostValue) * 100;
+            
+            maganjoBar.style.width = `${maganjoPercent}%`;
+            maganjoBar.setAttribute('aria-valuenow', maganjoPercent.toFixed(0));
+            
+            matuggaBar.style.width = `${matuggaPercent}%`;
+            matuggaBar.setAttribute('aria-valuenow', matuggaPercent.toFixed(0));
         }
 
         // Stock Table

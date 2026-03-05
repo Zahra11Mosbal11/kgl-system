@@ -73,11 +73,25 @@ function initSalesForm() {
                     productSelect.appendChild(option);
                 });
 
-                // Add change listener to update available stock display
+                // Add change listener to update available stock and price
                 productSelect.addEventListener("change", () => {
                     const selected = branchInventory.find(i => i.produceName === productSelect.value);
                     document.getElementById("availableStock").textContent = selected ? selected.quantity : 0;
+                    
+                    if (selected && selected.latestSellingPrice) {
+                        unitPriceInput.value = selected.latestSellingPrice;
+                        // Trigger calculation
+                        tonnageInput.dispatchEvent(new Event('input'));
+                    }
                 });
+
+                // Enforce read-only price for Sales Agents
+                const session = JSON.parse(localStorage.getItem("currentSession"));
+                if (session && session.role === 'sales_agent') {
+                    unitPriceInput.readOnly = true;
+                    unitPriceInput.style.backgroundColor = "#e9ecef";
+                    unitPriceInput.title = "Prices are set by the Manager";
+                }
             }
 
             // 2. Fetch Clients for datalist
@@ -97,8 +111,14 @@ function initSalesForm() {
                 const phoneInput = document.getElementById("contact");
                 buyerInput.addEventListener("input", () => {
                     const matched = window.allClients.find(c => c.name.toLowerCase() === buyerInput.value.toLowerCase());
-                    if (matched && phoneInput) {
-                        phoneInput.value = matched.contact;
+                    if (matched) {
+                        if (phoneInput) phoneInput.value = matched.contact;
+                        
+                        const ninInput = document.getElementById("nationalId");
+                        const locInput = document.getElementById("location");
+                        
+                        if (ninInput && matched.nationalId) ninInput.value = matched.nationalId;
+                        if (locInput && matched.location) locInput.value = matched.location;
                     }
                 });
             }
@@ -183,10 +203,10 @@ function initSalesForm() {
             if (!data.location) errors.push("Location is required for credit");
             if (!data.dueDate) errors.push("Due Date is required for credit");
 
-           const ninRegex = /^[CA][MF]\d{10}[A-Z]{2}$/;
+            const ninRegex = /^[A-Z]{2}[0-9A-Z]{12}$/;
 
             if (data.nationalId && !ninRegex.test(data.nationalId.trim().toUpperCase())) {
-                errors.push("Invalid National ID format");
+                errors.push("Invalid National ID format (Expected 14 characters)");
             }
         }
 
@@ -232,7 +252,7 @@ function initSalesForm() {
             }
         } catch (err) {
             console.error("Submission error:", err);
-            formErrors.innerHTML = "A network error occurred";
+            formErrors.innerHTML = err.message || "A network error occurred";
             formErrors.classList.remove("d-none");
         }
     });

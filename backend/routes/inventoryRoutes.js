@@ -90,7 +90,7 @@ router.get('/valuation', requireRoles(['manager', 'director']), async (req, res)
       Matugga: { costValue: 0, salesValue: 0 }
     };
 
-    inventory.forEach(item => {
+    const inventoryWithValues = inventory.map(item => {
       const itemCost = item.quantity * item.latestCost;
       const itemSales = item.quantity * item.latestSellingPrice;
       
@@ -101,6 +101,12 @@ router.get('/valuation', requireRoles(['manager', 'director']), async (req, res)
         branchBreakdown[item.branch].costValue += itemCost;
         branchBreakdown[item.branch].salesValue += itemSales;
       }
+
+      return {
+        ...item._doc,
+        stockValue: itemCost,
+        potentialSalesValue: itemSales
+      };
     });
 
     res.json({
@@ -110,7 +116,8 @@ router.get('/valuation', requireRoles(['manager', 'director']), async (req, res)
         totalPotentialSales,
         potentialProfit: totalPotentialSales - totalCostValue
       },
-      branchBreakdown
+      branchBreakdown,
+      inventory: inventoryWithValues
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

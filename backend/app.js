@@ -15,6 +15,7 @@ const userRoutes = require('./routes/userRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const supplierRoutes = require('./routes/supplierRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/users', userRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/clients', clientRoutes);
 app.use('/suppliers', supplierRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 // Home route
 app.get('/', (req, res) => {

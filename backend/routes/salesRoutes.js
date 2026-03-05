@@ -120,6 +120,25 @@ router.post("/cash", requireAuth, async (req, res) => {
 
     await sale.save();
 
+    // Update Client Profile (Create or update existing client)
+    // We use contact (phone) as a secondary unique identifier if nationalId isn't provided
+    await Client.findOneAndUpdate(
+      { contact: sale.contact },
+      { 
+        $set: { 
+          name: sale.buyerName, 
+          contact: sale.contact,
+          branch: req.user.branch
+        },
+        $inc: { totalPurchases: 1 },
+        $setOnInsert: {
+          totalDebt: 0,
+          recordedBy: req.user.id
+        }
+      },
+      { upsert: true, new: true }
+    );
+
     // Decrement stock
     inventory.quantity -= tonnage;
     inventory.lastUpdated = Date.now();
@@ -197,8 +216,8 @@ router.post("/credit", requireAuth, async (req, res) => {
     // check required fields
     const { nationalId, contact, amountDue, tonnage } = req.body;
 
-    // validate NIN format
-    const ninRegex = /^[A-Z]{2}\d{7}[A-Z]{4}\d[A-Z]$/;
+    // validate NIN format (14 characters)
+    const ninRegex = /^[A-Z]{2}[0-9A-Z]{12}$/;
     if (!ninRegex.test(nationalId)) {
       return res.status(400).json({ error: "national ID number is not valid" });
     }
@@ -233,12 +252,16 @@ router.post("/credit", requireAuth, async (req, res) => {
     await Client.findOneAndUpdate(
       { nationalId: creditSale.nationalId },
       { 
-        $inc: { totalDebt: creditSale.amountDue },
+        $inc: { 
+          totalDebt: creditSale.amountDue,
+          totalPurchases: 1
+        },
         $setOnInsert: { 
           name: creditSale.buyerName, 
           contact: creditSale.contact,
           location: creditSale.location,
-          branch: req.user.branch
+          branch: req.user.branch,
+          recordedBy: req.user.id
         }
       },
       { upsert: true, new: true }
@@ -298,8 +321,11 @@ router.get("/", requireAuth, async (req, res) => {
   try {
     let query = {};
     if (req.user.role === 'sales_agent') {
+      query.recordedBy = req.user.id;
+    } else if (req.user.role === 'manager') {
       query.branch = req.user.branch;
     }
+    // Director sees all, so query remains {}
 
     const cashSales = await CashSale.find(query).sort({ date: -1 });
     const creditSales = await CreditSale.find(query).sort({ date: -1 });

@@ -61,17 +61,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p>ID: ${item._id.slice(-6).toUpperCase()}</p>
                     </div>
                 </td>
-                <td>${item.contactPerson || '-'}</td>
                 <td>${item.contact}</td>
                 <td>${(item.productsSupplied || []).join(', ') || '-'}</td>
                 <td><span class="badge ${statusClass}">${item.status || 'Active'}</span></td>
                 <td>${lastDelivery}</td>
-                <td>
-                    <div class="action-buttons">
-                        <span class="btn-view" style="cursor: pointer; color: #1a73e8;">View</span>
-                        <span class="btn-edit" style="cursor: pointer; color: #34a853; margin-left: 10px;">Edit</span>
-                    </div>
-                </td>
             `;
             tableBody.appendChild(tr);
         });

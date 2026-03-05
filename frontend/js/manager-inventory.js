@@ -65,12 +65,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td>${item.quantity.toLocaleString()} kg</td>
                 <td>${statusBadge}</td>
                 <td>${lastRestocked}</td>
-                <td>
-                    <div class="action-buttons">
-                        <span class="btn-view" style="cursor: pointer; color: #1a73e8;">View</span>
-                        <span class="btn-edit" style="cursor: pointer; color: #34a853; margin-left: 10px;">Edit</span>
-                    </div>
-                </td>
             `;
             tableBody.appendChild(tr);
         });

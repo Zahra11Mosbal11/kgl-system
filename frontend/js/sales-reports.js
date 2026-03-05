@@ -82,9 +82,27 @@ async function fetchAndGenerate() {
     console.log("API Response:", data);
     if (data.success) {
       const cashSales = (data.cashSales || []).map(s => ({ ...s, type: 'cash' }));
-      const creditSales = (data.creditSales || []).map(s => ({ ...s, type: 'credit' }));
+      const creditSales = (data.creditSales || []).map(s => ({ 
+        ...s, 
+        type: 'credit',
+        date: s.dispatchDate || s.createdAt // Normalize date field
+      }));
       allSalesData = [...cashSales, ...creditSales];
       console.log(`Loaded ${allSalesData.length} records`);
+      
+      // Populate Products dropdown dynamically
+      const products = [...new Set(allSalesData.map(s => s.produceName))].filter(Boolean);
+      if (productFilterEl) {
+        // Keep "All Products"
+        productFilterEl.innerHTML = '<option value="all">All Products</option>';
+        products.sort().forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.toLowerCase();
+          opt.textContent = p;
+          productFilterEl.appendChild(opt);
+        });
+      }
+
       generateReport();
     } else {
       console.error("Failed to fetch sales data:", data.error);

@@ -47,28 +47,7 @@
           <p>Karibu Groceries LTD</p>
         </div>
         <div class="nav-menu">
-          <a href="sales-agent-dashboard.html" class="nav-item" id="dashboardLink">
-            <img src="assets/icons/Rectangle 2804.svg" alt="" />
-            <span>Dashboard</span>
-          </a>
-          <a href="client.html" class="nav-item">
-            <img src="assets/icons/suppliers.svg" alt="" />
-            <span>Clients</span>
-          </a>
-          <a href="sales-reports.html" class="nav-item">
-            <img src="assets/icons/report.svg" alt="" />
-            <span>Reports</span>
-          </a>
-          <div class="settings-logout">
-            <a href="settings.html" class="nav-item active">
-              <img src="assets/icons/settings.svg" alt="" />
-              <span>Settings</span></a
-            >
-            <a href="#" class="nav-item" id="logoutBtn">
-              <img src="assets/icons/log_out.svg" alt="" />
-              <span>Log Out</span></a
-            >
-          </div>
+          <!-- Sidebar items will be injected by sidebar-common.js -->
         </div>
       </div>
       <!-- Main Content Section -->
@@ -168,6 +147,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/sidebar-common.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         // Auth Check
@@ -182,33 +163,15 @@
         const welcomeMsg = document.getElementById("welcomeMsg");
         const fullNameInput = document.getElementById("fullNameInput");
         const roleInput = document.getElementById("roleInput");
-        const dashboardLink = document.getElementById("dashboardLink");
 
         if (welcomeMsg) welcomeMsg.innerHTML = `${session.username} <span>(Settings)</span>`;
         if (fullNameInput) fullNameInput.value = session.username; // Using username as name for now
         if (roleInput) roleInput.value = session.role;
 
-        // Role-based logic
-        if (session.role === 'Manager' || session.role === 'Director') {
-          document.getElementById('adminSettings').style.display = 'block';
-          // Redirect dashboard link based on role
-          if (session.role === 'Director') {
-             dashboardLink.href = 'director-dashboard.html';
-          } else if (session.role === 'Manager') {
-             dashboardLink.href = 'manager-dashboard.html';
-          }
-        } else {
-           dashboardLink.href = 'sales-agent-dashboard.html';
-        }
-
-        // Logout
-        const logoutBtn = document.getElementById("logoutBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            localStorage.removeItem("currentSession");
-            window.location.href = "index.html";
-          });
+        // Role-based logic for admin settings
+        if (session.role === 'manager' || session.role === 'director' || session.role === 'Manager' || session.role === 'Director') {
+          const adminSettings = document.getElementById('adminSettings');
+          if (adminSettings) adminSettings.style.display = 'block';
         }
       });
     </script>

@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const tr = document.createElement('tr');
             tr.setAttribute('data-status', item.paymentStatus?.toLowerCase() || 'received');
             
-            const dateStr = item.date ? new Date(item.date).toLocaleDateString() : 'N/A';
+            const dateStr = item.date ? new Date(item.date).toLocaleDateString() : '-';
             const statusClass = item.paymentStatus === 'Paid' ? 'active' : 'credit';
 
             tr.innerHTML = `
@@ -63,9 +63,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td>UGX ${item.cost.toLocaleString()}</td>
                 <td><span class="badge ${statusClass}">${item.paymentStatus || 'Received'}</span></td>
                 <td>
-                    <div class="action-buttons">
-                        <span class="btn-view" style="cursor: pointer; color: #1a73e8;">View</span>
-                    </div>
+                    ${item.paymentStatus !== 'Paid' ? `
+                        <button class="btn btn-sm btn-success" onclick="markAsPaid('${item._id}')">Mark as Paid</button>
+                    ` : '<span class="text-muted small">Completed</span>'}
                 </td>
             `;
             tableBody.appendChild(tr);
@@ -91,7 +91,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             const matchesSearch = rowStr.includes(searchTerm);
             
             const status = item.paymentStatus?.toLowerCase() || 'received';
-            const matchesFilter = activeFilter === 'all' || activeFilter === status;
+            let matchesFilter = activeFilter === 'all';
+            
+            if (activeFilter === 'received') {
+                matchesFilter = (status === 'paid' || status === 'received');
+            } else if (activeFilter === 'pending') {
+                matchesFilter = (status === 'pending' || status === 'partial');
+            }
             
             return matchesSearch && matchesFilter;
         });

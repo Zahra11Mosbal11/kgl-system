@@ -25,10 +25,19 @@ const clientSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  totalPurchases: {
+    type: Number,
+    default: 0
+  },
   branch: {
     type: String,
     enum: ['Maganjo', 'Matugga'],
     required: true
+  },
+  recordedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false
   }
 }, { timestamps: true });
 

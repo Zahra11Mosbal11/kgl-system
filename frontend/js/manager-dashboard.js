@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         // Calculate "To be received" (Pending Purchases)
         const toBeReceived = branchPurchases
-            .filter(p => !p.paymentStatus || p.paymentStatus.toLowerCase() === 'pending')
+            .filter(p => p.paymentStatus && p.paymentStatus === 'Pending')
             .reduce((sum, p) => sum + (p.tonnage || 0), 0);
         
         // Update Stats Cards
@@ -148,6 +148,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Remove loading states
         document.querySelectorAll('.stats-cards, .low-stock-section, .top-selling-section')
             .forEach(el => el.classList.remove('loading'));
+
+        // Check for Out of Stock items
+        showStockAlerts(branchInventory);
+    }
+
+    function showStockAlerts(inventory) {
+        const alertContainer = document.getElementById('stockAlerts');
+        if (!alertContainer) return;
+        
+        const outOfStock = inventory.filter(i => i.quantity === 0);
+        
+        if (outOfStock.length > 0) {
+            const list = outOfStock.map(i => i.produceName).join(', ');
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; border: none; background: #fee2e2; color: #991b1b;">
+                    <strong>Out of Stock Alert:</strong> The following items are out of stock in your branch: <strong>${list}</strong>. Please restock immediately.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        } else {
+            alertContainer.innerHTML = '';
+        }
     }
 
     function drawCharts(data) {

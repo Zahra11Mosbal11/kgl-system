@@ -11,8 +11,8 @@ const creditSaleSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(v) {
-        // Uganda NIN : CM12345678ABCD9E
-        return /^[A-Z]{2}\d{7}[A-Z]{4}\d[A-Z]$/.test(v);
+        // Uganda NIN : CM810123456789 (14 chars)
+        return /^[A-Z]{2}[0-9A-Z]{12}$/.test(v);
       }
     }
   },

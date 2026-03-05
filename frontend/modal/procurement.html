@@ -41,10 +41,23 @@
           </div>
 
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="form-group mb-3">
                 <label class="form-label">Product Name</label>
-                <input type="text" id="ProductName" class="form-control" required>
+                <select id="ProductName" class="form-control" required>
+                  <option value="">Select produce...</option>
+                  <option value="Beans">Beans</option>
+                  <option value="Grain Maize">Grain Maize</option>
+                  <option value="Cow peas">Cow peas</option>
+                  <option value="G-nuts">G-nuts</option>
+                  <option value="Soybeans">Soybeans</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label class="form-label">Produce Type</label>
+                <input type="text" id="produceType" class="form-control" placeholder="Alphabets only (e.g., Legumes)" required>
               </div>
             </div>
           </div>

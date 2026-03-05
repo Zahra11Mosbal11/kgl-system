@@ -62,6 +62,25 @@ const purchaseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['Cash', 'Mobile Money', 'Bank Transfer'],
+    required: true
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['Paid', 'Pending', 'Partial'],
+    required: true
+  },
+  deliveryDate: {
+    type: Date,
+    required: true
+  },
+  notes: {
+    type: String,
+    trim: true,
+    default: ""
   }
 }, { timestamps: true });
 

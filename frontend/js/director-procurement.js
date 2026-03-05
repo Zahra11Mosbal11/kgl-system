@@ -36,12 +36,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const totalProcurement = purchases.reduce((sum, p) => sum + p.cost, 0);
         const pendingCount = purchases.filter(p => p.paymentStatus?.toLowerCase() === 'pending').length;
 
-        const totalCardValue = document.querySelector('.card-value');
+        const totalCardValue = document.getElementById('totalProcurementValue');
         if (totalCardValue) {
             totalCardValue.textContent = `UGX ${(totalProcurement / 1000000).toFixed(1)}M`;
         }
         
-        const pendingCardValue = document.querySelectorAll('.card-value')[1];
+        const pendingCardValue = document.getElementById('pendingDeliveriesValue');
         if (pendingCardValue) {
             pendingCardValue.textContent = `${pendingCount} Orders`;
         }
@@ -55,13 +55,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             sorted.slice(0, 15).forEach(item => {
                 const tr = document.createElement('tr');
-                const dateStr = item.date ? new Date(item.date).toLocaleDateString() : 'N/A';
+                const dateStr = item.date ? new Date(item.date).toLocaleDateString() : '-';
                 const statusBadge = item.paymentStatus === 'Paid' ? '<span class="badge bg-success">Received</span>' : '<span class="badge bg-warning">Pending</span>';
 
                 tr.innerHTML = `
                     <td>${dateStr}</td>
                     <td>${item.dealerName}</td>
                     <td>${item.produceName}</td>
+                    <td>${item.branch}</td>
                     <td>${item.tonnage.toLocaleString()} kg</td>
                     <td>UGX ${(item.cost / 1000000).toFixed(1)}M</td>
                     <td>${statusBadge}</td>

@@ -38,6 +38,13 @@ const userSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  isOnline: {
+    type: Boolean,
+    default: false
+  },
+  lastLogin: {
+    type: Date
   }
 }, { timestamps: true });
 

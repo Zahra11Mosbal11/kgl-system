@@ -3,7 +3,7 @@ const router = express.Router();
 const Purchase = require('../models/Purchase');
 const Inventory = require('../models/Inventory');
 const Supplier = require('../models/Supplier');
-const { requireManager } = require('../middleware/auth');
+const { requireManager, requireDirector, requireRoles } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -80,20 +80,22 @@ router.post('/', requireManager, async (req, res) => {
     
     await purchase.save();
     
-    // Update inventory
-    await Inventory.findOneAndUpdate(
-      { produceName: purchase.produceName, branch: purchase.branch },
-      { 
-        $inc: { quantity: purchase.tonnage },
-        $set: { 
-          produceType: purchase.produceType, 
-          latestCost: purchase.cost,
-          latestSellingPrice: purchase.sellingPrice,
-          lastUpdated: Date.now() 
-        }
-      },
-      { upsert: true, new: true }
-    );
+    // Update inventory ONLY if Paid
+    if (purchase.paymentStatus === 'Paid') {
+      await Inventory.findOneAndUpdate(
+        { produceName: purchase.produceName, branch: purchase.branch },
+        { 
+          $inc: { quantity: purchase.tonnage },
+          $set: { 
+            produceType: purchase.produceType, 
+            latestCost: purchase.cost,
+            latestSellingPrice: purchase.sellingPrice,
+            lastUpdated: Date.now() 
+          }
+        },
+        { upsert: true, new: true }
+      );
+    }
 
     // Update Supplier Info
     await Supplier.findOneAndUpdate(
@@ -102,7 +104,8 @@ router.post('/', requireManager, async (req, res) => {
         $set: { 
           contact: purchase.contact,
           location: 'TBD', // We don't have location in purchase yet
-          branch: purchase.branch
+          branch: purchase.branch,
+          lastDelivery: purchase.date
         },
         $addToSet: { productsSupplied: purchase.produceName }
       },
@@ -116,7 +119,7 @@ router.post('/', requireManager, async (req, res) => {
     });
     
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
@@ -134,13 +137,13 @@ router.post('/', requireManager, async (req, res) => {
  *       401:
  *         description: unauthorized
  */
-router.get('/', requireManager, async (req, res) => {
+router.get('/', requireRoles(['manager', 'director']), async (req, res) => {
   try {
     const purchases = await Purchase.find()
       .populate('recordedBy', 'fullName')
       .sort({ date: -1 });
     
-    res.json({ purchases });
+    res.json({ success: true, purchases });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

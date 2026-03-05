@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ${(client.totalDebt || 0).toLocaleString()} UGX
         </td>
         <td><span class="badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
-        <td>${client.updatedAt ? new Date(client.updatedAt).toISOString().split('T')[0] : 'N/A'}</td>
+        <td>${client.updatedAt ? new Date(client.updatedAt).toISOString().split('T')[0] : '-'}</td>
         <td>
           <div class="action-buttons">
             <button class="btn-action btn-view" title="View Details" onclick="viewClient('${client._id}')">

@@ -30,7 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.success) {
                 const branch = session.branch || 'Maganjo';
                 const cashSales = (response.cashSales || []).filter(s => s.branch === branch).map(s => ({...s, type: 'cash'}));
-                const creditSales = (response.creditSales || []).filter(s => s.branch === branch).map(s => ({...s, type: 'credit'}));
+                const creditSales = (response.creditSales || []).filter(s => s.branch === branch).map(s => ({
+                    ...s, 
+                    type: 'credit',
+                    date: s.dispatchDate || s.createdAt // Normalize date field
+                }));
                 
                 allSalesData = [...cashSales, ...creditSales].sort((a,b) => new Date(b.date) - new Date(a.date));
                 renderSalesTable(allSalesData);
@@ -55,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const tr = document.createElement('tr');
             tr.setAttribute('data-status', item.type);
             
-            const dateStr = item.date ? new Date(item.date).toLocaleDateString() : 'N/A';
+            const dateStr = item.date ? new Date(item.date).toLocaleDateString() : '-';
             const statusClass = item.type === 'cash' ? 'active' : 'credit';
             const statusText = item.type === 'cash' ? 'Paid' : 'Credit';
             const amount = item.type === 'cash' ? (item.amountPaid || 0) : (item.amountDue || 0);
@@ -67,11 +71,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td>${item.produceName} (${item.tonnage.toLocaleString()} kg)</td>
                 <td>UGX ${amount.toLocaleString()}</td>
                 <td><span class="badge ${statusClass}">${statusText}</span></td>
-                <td>
-                    <div class="action-buttons">
-                        <span class="btn-view" style="cursor: pointer; color: #1a73e8;">View</span>
-                    </div>
-                </td>
             `;
             tableBody.appendChild(tr);
         });

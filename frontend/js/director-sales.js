@@ -36,30 +36,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tableBody = document.getElementById('salesBreakdownBody');
         if (!tableBody) return;
 
-        const cashSales = data.cashSales || [];
+        const cashSales = (data.cashSales || []).map(s => ({ ...s, type: 'cash' }));
+        const creditSales = (data.creditSales || []).map(s => ({ ...s, type: 'credit' }));
+        const allSales = [...cashSales, ...creditSales];
+        
         const branches = ['Maganjo', 'Matugga'];
         
         tableBody.innerHTML = '';
         branches.forEach(branch => {
-            const branchSales = cashSales.filter(s => s.branch === branch);
-            const totalRevenue = branchSales.reduce((sum, s) => sum + s.amountPaid, 0);
+            const branchSales = allSales.filter(s => s.branch === branch);
+            const totalRevenue = branchSales.reduce((sum, s) => {
+                const amount = s.type === 'cash' ? (s.amountPaid || 0) : (s.amountDue || 0);
+                return sum + amount;
+            }, 0);
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${branch}</td>
                 <td>${branchSales.length}</td>
                 <td>UGX ${(totalRevenue / 1000000).toFixed(1)}M</td>
-                <td><span class="text-success">+0%</span></td> 
+                <td><span class="badge bg-light text-dark">Active</span></td> 
             `;
             tableBody.appendChild(tr);
         });
     }
 
     function renderCharts(data) {
-        const cashSales = data.cashSales || [];
+        const cashSales = (data.cashSales || []).map(s => ({ ...s, type: 'cash' }));
+        const creditSales = (data.creditSales || []).map(s => ({ ...s, type: 'credit' }));
+        const allSales = [...cashSales, ...creditSales];
         
         // Branch Sales Chart
-        const maganjoSales = cashSales.filter(s => s.branch === 'Maganjo').reduce((sum, s) => sum + s.amountPaid, 0);
-        const matuggaSales = cashSales.filter(s => s.branch === 'Matugga').reduce((sum, s) => sum + s.amountPaid, 0);
+        const maganjoSales = allSales.filter(s => s.branch === 'Maganjo').reduce((sum, s) => {
+            return sum + (s.type === 'cash' ? (s.amountPaid || 0) : (s.amountDue || 0));
+        }, 0);
+        const matuggaSales = allSales.filter(s => s.branch === 'Matugga').reduce((sum, s) => {
+            return sum + (s.type === 'cash' ? (s.amountPaid || 0) : (s.amountDue || 0));
+        }, 0);
 
         const branchCtx = document.getElementById('branchSalesChart');
         if (branchCtx) {
@@ -79,8 +91,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Product Distribution Chart
         const distribution = {};
-        cashSales.forEach(s => {
-            distribution[s.produceName] = (distribution[s.produceName] || 0) + s.amountPaid;
+        allSales.forEach(s => {
+            const amount = s.type === 'cash' ? (s.amountPaid || 0) : (s.amountDue || 0);
+            distribution[s.produceName] = (distribution[s.produceName] || 0) + amount;
         });
 
         const prodCtx = document.getElementById('productSalesChart');
