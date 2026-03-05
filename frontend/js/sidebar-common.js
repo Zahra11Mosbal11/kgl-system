@@ -6,7 +6,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const session = JSON.parse(localStorage.getItem("currentSession"));
     if (!session) {
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
         return;
     }
 
@@ -89,7 +89,7 @@ function renderSidebar(session) {
                 console.warn("Logout notification failed:", err);
             }
             localStorage.removeItem("currentSession");
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
         });
     }
 }

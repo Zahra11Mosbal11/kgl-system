@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const session = JSON.parse(localStorage.getItem("currentSession"));
 
   if (!session || !session.username || session.role !== "Director") {
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
     return;
   }
 
@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if it's the dashboard or a specific report page
     if (welcomeMsg.innerText.includes("User")) {
         welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
-    }
+        const branchName = document.getElementById("branchName"); 
+        if (branchName && session.branch) branchName.textContent = session.branch;    }
     // For other pages, keep the page title but acknowledge the user if needed
   }
 
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("currentSession");
-      window.location.href = "index.html";
+      window.location.href = "../index.html";
     });
   }
 });

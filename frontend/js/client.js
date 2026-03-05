@@ -4,21 +4,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const session = JSON.parse(localStorage.getItem("currentSession"));
   
   if (!session || !session.username) {
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
     return;
   }
 
   const welcomeMsg = document.querySelector(".header h2");
   if (welcomeMsg) {
     welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
-  }
+        const branchName = document.getElementById("branchName"); 
+        if (branchName && session.branch) branchName.textContent = session.branch;  }
 
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("currentSession");
-      window.location.href = "index.html";
+      window.location.href = "../index.html";
     });
   }
 

@@ -6,21 +6,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const session = JSON.parse(localStorage.getItem("currentSession"));
 
     if (!session || session.role !== "manager") {
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
         return;
     }
 
     const welcomeMsg = document.getElementById("welcomeMsg");
     if (welcomeMsg) {
         welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
-    }
+        const branchName = document.getElementById("branchName"); 
+        if (branchName && session.branch) branchName.textContent = session.branch;    }
 
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
             localStorage.removeItem("currentSession");
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
         });
     }
 
@@ -94,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const lowStockContainer = document.querySelector('.low-stock-items');
         if (lowStockContainer) {
             lowStockContainer.innerHTML = '';
-            const lowStockItems = branchInventory.filter(i => i.quantity < 1000).slice(0, 3);
+            const lowStockItems = branchInventory.filter(i => i.quantity < 100).slice(0, 3);
             
             if (lowStockItems.length === 0) {
                 lowStockContainer.innerHTML = '<p class="p-3 text-muted">All stock levels are healthy.</p>';

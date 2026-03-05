@@ -50,7 +50,7 @@
       <div class="main-content">
         <!-- Header Section -->
         <div class="header">
-          <h2 id="welcomeMsg">Username <span>(Sales Agent)</span></h2>
+          <div class="header-user-info"><h2 id="welcomeMsg">Username <span>(Sales Agent)</span></h2><p id="branchName" class="text-muted small mb-0"></p></div>
           <div class="header-icons">
             <img src="assets/icons/bell.svg" alt="" />
             <img src="assets/icons/suppliers.svg" alt="" />
@@ -145,21 +145,22 @@
         const session = JSON.parse(localStorage.getItem("currentSession"));
         
         if (!session || !session.username) {
-          window.location.href = "index.html";
+          window.location.href = "../index.html";
           return;
         }
 
         const welcomeMsg = document.getElementById("welcomeMsg");
         if (welcomeMsg) {
           welcomeMsg.innerHTML = `${session.username} <span>(${session.role})</span>`;
-        }
+        const branchName = document.getElementById("branchName"); 
+        if (branchName && session.branch) branchName.textContent = session.branch;        }
 
         const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
             localStorage.removeItem("currentSession");
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
           });
         }
       });

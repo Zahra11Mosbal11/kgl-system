@@ -8,21 +8,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const allowedRoles = ["director", "manager"];
 
     if (!session || !allowedRoles.includes(session.role)) {
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
         return;
     }
 
     const welcomeMsg = document.getElementById("welcomeMsg");
     if (welcomeMsg) {
         welcomeMsg.innerHTML = `${session.role === 'director' ? 'User Management' : 'Staff Management'} <span>(${session.role})</span>`;
-    }
+        const branchName = document.getElementById("branchName"); 
+        if (branchName && session.branch) branchName.textContent = session.branch;    }
 
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
             localStorage.removeItem("currentSession");
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
         });
     }
 
