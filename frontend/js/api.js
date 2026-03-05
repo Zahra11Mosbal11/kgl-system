@@ -1,6 +1,6 @@
 // detect if we are running on a different port than the backend (default 3000)
 const backendPort = 3000;
-const isDevServer = window.location.port && window.location.port !== backendPort.toString();const API_BASE_URL = isDevServer ? `http://localhost:${backendPort}` : 'https://kgl-system-hqtw.onrender.com/'; // Replace with your actual backend URL
+const isDevServer = window.location.port && window.location.port !== backendPort.toString();const API_BASE_URL = isDevServer ? `http://localhost:${backendPort}` : 'https://kgl-system-hqtw.onrender.com'; // Replace with your actual backend URL
 
 
 const api = {
