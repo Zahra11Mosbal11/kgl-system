@@ -35,7 +35,7 @@ Low stock alerts
 
 Fully responsive design
 
-Login system (UI)
+Login system (UI + JWT authentication)
 
 ## 🛠️ Technologies Used
 
@@ -44,13 +44,16 @@ HTML5 – Structure
 CSS3 – Styling & Layout
 
 JavaScript – Interactivity
+**Backend:** Node.js + Express
+- **Database:** MongoDB Atlas
+- **Hosting:** Render (backend), GitHub Pages (frontend)
 
 Google Charts – Data visualization
 
 Responsive Design – Mobile friendly
 
-
-
+## login page: https://zahra11mosbal11.github.io/kgl-system/
+<img width="1189" height="651" alt="Screenshot 2026-03-05 at 11 30 42" src="https://github.com/user-attachments/assets/9a389a21-2167-4985-863b-155c6f9b10e1" />
 
 
 
