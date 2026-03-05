@@ -1,7 +1,7 @@
 // detect if we are running on a different port than the backend (default 3000)
 const backendPort = 3000;
-const isDevServer = window.location.port && window.location.port !== backendPort.toString();
-const API_BASE_URL = isDevServer ? `http://localhost:${backendPort}` : '';
+const isDevServer = window.location.port && window.location.port !== backendPort.toString();const API_BASE_URL = isDevServer ? `http://localhost:${backendPort}` : 'https://kgl-system-hqtw.onrender.com/'; // Replace with your actual backend URL
+
 
 const api = {
     async request(endpoint, options = {}) {
@@ -25,11 +25,12 @@ const api = {
 
             if (!response.ok) {
                 let errorMessage = 'An error occurred';
+                const clonedResponse = response.clone();
                 try {
                     const errorData = await response.json();
                     errorMessage = errorData.error || response.statusText;
                 } catch (e) {
-                    const text = await response.text();
+                    const text = await clonedResponse.text();
                     console.error('Server returned non-JSON response:', text);
                     errorMessage = `Server Error (${response.status}): ${response.statusText}`;
                 }
