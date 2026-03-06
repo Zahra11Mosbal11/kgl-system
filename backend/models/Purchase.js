@@ -65,7 +65,7 @@ const purchaseSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['Cash', 'Mobile Money', 'Bank Transfer'],
+    enum: ['Cash', 'Mobile Money', 'Bank Transfer', 'Credit'],
     required: true
   },
   paymentStatus: {
