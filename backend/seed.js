@@ -8,11 +8,12 @@ const seedDatabase = async () => {
     
     // delete existing users to avoid duplicates
     await User.deleteMany({});
+    const password = process.env.PASSWORD_USER || 'password123';
     
     // create director user
     const director = new User({
       username: 'director1',
-      password: 'password123',
+      password: password,
       role: 'director',
       fullName: 'System Director',
       branch: 'Maganjo',
@@ -22,7 +23,7 @@ const seedDatabase = async () => {
     // create manager user
     const manager = new User({
       username: 'manager1',
-      password: 'password123',
+      password: password,
       role: 'manager',
       fullName: 'Ahmed Manager',
       branch: 'Maganjo',
@@ -32,7 +33,7 @@ const seedDatabase = async () => {
     // create sales agent user
     const salesAgent = new User({
       username: 'sales1',
-      password: 'password123',
+      password: password,
       role: 'sales_agent',
       fullName: 'Mohamed Sales',
       branch: 'Matugga',
@@ -44,9 +45,10 @@ const seedDatabase = async () => {
     await salesAgent.save();
     
     console.log(' Database seeded successfully');
-    console.log('Director: director1 / password123');
-    console.log('Manager: manager1 / password123');
-    console.log('Sales Agent: sales1 / password123');
+    console.log(`Director: director1 / ${password}`);
+    console.log(`Manager: manager1 / ${password}`);
+    console.log(`Sales Agent: sales1 / ${password}`);
+
     
     process.exit(0);
   } catch (error) {
