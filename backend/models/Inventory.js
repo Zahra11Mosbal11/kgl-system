@@ -25,9 +25,9 @@ const inventorySchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  branch: {
+    branch: {
     type: String,
-    enum: ['Maganjo', 'Matugga'],
+    enum: ['Maganjo', 'Matugga', 'All'],
     required: true
   },
   lastUpdated: {

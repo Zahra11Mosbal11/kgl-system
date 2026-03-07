@@ -16,17 +16,25 @@
           <div id="formErrors" class="alert alert-danger d-none"></div>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="saleDate">Sales Date & Time</label>
                 <input type="datetime-local" id="saleDate" name="date" class="form-control" required>
               </div>
             </div>
-
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="salesAgentName">Sales Person</label>
                 <input type="text" id="salesAgentName" name="salesAgentName" class="form-control" placeholder="Enter staff name" required>
+              </div>
+            </div>
+            <div class="col-md-4" id="salesBranchFieldContainer" style="display: none;">
+              <div class="form-group">
+                <label for="salesBranchSelect">Branch</label>
+                <select id="salesBranchSelect" name="branch" class="form-control">
+                  <option value="Maganjo">Maganjo</option>
+                  <option value="Matugga">Matugga</option>
+                </select>
               </div>
             </div>
           </div>

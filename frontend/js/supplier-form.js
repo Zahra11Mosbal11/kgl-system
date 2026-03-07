@@ -38,13 +38,14 @@ function initSupplierForm() {
         }
 
         const session = JSON.parse(localStorage.getItem("currentSession"));
+        const isGlobalUser = session && (session.role === 'manager' || session.role === 'director');
         
         const payload = {
             name,
             contactPerson,
             contact,
             location,
-            branch: (session && session.branch) ? session.branch : 'Maganjo',
+            branch: isGlobalUser ? 'All' : (session && session.branch ? session.branch : 'Maganjo'),
             status: 'Active'
         };
 

@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // Search and Filter Logic
+    const searchInput = document.getElementById('purchasesSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn:not([type="date"])');
+    const branchSelector = document.getElementById('branchSelector');
+
     let purchasesData = [];
 
     // Fetch Purchases Data
@@ -29,8 +34,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await api.get('/procurement');
             if (response.purchases) {
-                purchasesData = response.purchases.filter(p => p.branch === session.branch);
-                renderPurchasesTable(purchasesData);
+                purchasesData = response.purchases;
+                filterTable();
             }
         } catch (error) {
             console.error("Error fetching purchases data:", error);
@@ -44,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableBody.innerHTML = '';
 
         if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No procurement records found for this branch.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No procurement records found for this branch.</td></tr>';
             return;
         }
 
@@ -53,16 +58,25 @@ document.addEventListener("DOMContentLoaded", async () => {
             tr.setAttribute('data-status', item.paymentStatus?.toLowerCase() || 'received');
             
             const dateStr = item.date ? new Date(item.date).toLocaleDateString() : '-';
-            const statusClass = item.paymentStatus === 'Paid' ? 'active' : 'credit';
+            const isDelivered = item.deliveryDate && new Date(item.deliveryDate) <= new Date();
+            const deliveryClass = isDelivered ? 'active' : 'credit';
+            const deliveryText = isDelivered ? 'Received' : 'In Way';
+
+            const paymentClass = item.paymentStatus === 'Paid' ? 'badge bg-success' : 'badge bg-warning text-dark';
+            const paymentText = item.paymentStatus || 'Pending';
+
+            const hasBranchColumn = branchSelector && branchSelector.value === 'All';
 
             tr.innerHTML = `
                 <td>#PUR-${item._id.slice(-6).toUpperCase()}</td>
                 <td>${dateStr}</td>
+                ${hasBranchColumn ? `<td>${item.branch}</td>` : ''}
                 <td>${item.dealerName}</td>
                 <td>${item.produceName}</td>
                 <td>${item.tonnage.toLocaleString()} kg</td>
                 <td>UGX ${item.cost.toLocaleString()}</td>
-                <td><span class="badge ${statusClass}">${item.paymentStatus || 'Received'}</span></td>
+                <td><span class="badge ${deliveryClass}">${deliveryText}</span></td>
+                <td><span class="${paymentClass}">${paymentText}</span></td>
                 <td>
                     ${item.paymentStatus !== 'Paid' ? `
                         <button class="btn btn-sm btn-success" onclick="markAsPaid('${item._id}')">Mark as Paid</button>
@@ -72,6 +86,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             tableBody.appendChild(tr);
         });
 
+        // Update Header if needed
+        const headerRow = document.querySelector('.clients-table thead tr');
+        if (headerRow) {
+            const hasBranchHeader = headerRow.innerText.includes('Branch');
+            const shouldHaveBranchHeader = branchSelector && branchSelector.value === 'All';
+            
+            if (shouldHaveBranchHeader && !hasBranchHeader) {
+                const th = document.createElement('th');
+                th.textContent = 'Branch';
+                headerRow.insertBefore(th, headerRow.children[2]);
+            } else if (!shouldHaveBranchHeader && hasBranchHeader) {
+                headerRow.children[2].remove();
+            }
+        }
+
         // Remove loading state
         document.querySelector('.purchases-table-container')?.classList.remove('loading');
     }
@@ -79,28 +108,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Initial Load
     await window.loadPurchases();
 
-    // Search and Filter Logic
-    const searchInput = document.getElementById('purchasesSearch');
-    const filterBtns = document.querySelectorAll('.filter-btn:not([type="date"])');
+    if (branchSelector) {
+        if (session.role === 'manager' || session.role === 'director') {
+            branchSelector.style.display = 'none'; // Divisions canceled for managers
+            branchSelector.value = 'All';
+        } else {
+            branchSelector.style.display = 'block';
+            branchSelector.value = session.branch;
+        }
+
+        branchSelector.addEventListener('change', () => {
+            filterTable();
+        });
+    }
 
     function filterTable() {
         const searchTerm = searchInput.value.toLowerCase();
         const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+        const selectedBranch = branchSelector ? branchSelector.value : session.branch;
 
         const filteredData = purchasesData.filter(item => {
             const rowStr = `${item.dealerName} ${item.produceName} ${item._id}`.toLowerCase();
             const matchesSearch = rowStr.includes(searchTerm);
             
-            const status = item.paymentStatus?.toLowerCase() || 'received';
+            const isDelivered = item.deliveryDate && new Date(item.deliveryDate) <= new Date();
             let matchesFilter = activeFilter === 'all';
             
             if (activeFilter === 'received') {
-                matchesFilter = (status === 'paid' || status === 'received');
-            } else if (activeFilter === 'pending') {
-                matchesFilter = (status === 'pending' || status === 'partial');
+                matchesFilter = isDelivered;
+            } else if (activeFilter === 'in_way') {
+                matchesFilter = !isDelivered;
             }
             
-            return matchesSearch && matchesFilter;
+            const matchesBranch = selectedBranch === 'All' || item.branch === selectedBranch;
+
+            return matchesSearch && matchesFilter && matchesBranch;
         });
 
         renderPurchasesTable(filteredData);

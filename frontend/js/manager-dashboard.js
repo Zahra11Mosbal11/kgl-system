@@ -25,39 +25,68 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Fetch Dashboard Data
-    try {
-        const [inventoryRes, salesRes, procurementRes, suppliersRes] = await Promise.all([
-            api.get('/inventory'),
-            api.get('/sales'),
-            api.get('/procurement'),
-            api.get('/suppliers')
-        ]);
+    // Branch Selector Initialization
+  const branchSelector = document.getElementById('branchSelector');
+  const isGlobalUser = session.role === 'manager' || session.role === 'director';
 
-        if (inventoryRes.success && salesRes.success && procurementRes.purchases && suppliersRes.success) {
-            const data = {
-                inventory: inventoryRes.inventory,
-                sales: salesRes,
-                purchases: procurementRes.purchases,
-                suppliers: suppliersRes.suppliers
-            };
-            
-            updateDashboard(data);
-            google.charts.setOnLoadCallback(() => drawCharts(data));
+  if (branchSelector) {
+      if (isGlobalUser) {
+          branchSelector.style.display = 'none'; // Hide since divisions are canceled
+          branchSelector.value = 'All';
+      } else {
+          branchSelector.style.display = 'block';
+          branchSelector.value = session.branch || 'Maganjo';
+      }
+      
+      branchSelector.addEventListener('change', () => {
+          fetchAndReload();
+      });
+  }
+
+    let dashboardData = null;
+
+    async function fetchAndReload() {
+        try {
+            const [inventoryRes, salesRes, procurementRes, suppliersRes] = await Promise.all([
+                api.get('/inventory'),
+                api.get('/sales'),
+                api.get('/procurement'),
+                api.get('/suppliers')
+            ]);
+
+            if (inventoryRes.success && salesRes.success && procurementRes.purchases && suppliersRes.success) {
+                dashboardData = {
+                    inventory: inventoryRes.inventory,
+                    sales: salesRes,
+                    purchases: procurementRes.purchases,
+                    suppliers: suppliersRes.suppliers
+                };
+                
+                const selectedBranch = branchSelector ? branchSelector.value : session.branch;
+                updateDashboard(dashboardData, selectedBranch);
+                google.charts.setOnLoadCallback(() => drawCharts(dashboardData, selectedBranch));
+            }
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error);
         }
-    } catch (error) {
-        console.error("Error fetching dashboard data:", error);
     }
 
-    function updateDashboard(data) {
-        const branch = session.branch || 'Maganjo'; // Default if not found
+    fetchAndReload();
+
+    function updateDashboard(data, selectedBranch) {
+        const branch = selectedBranch || 'All';
         
-        // Filter data for the manager's branch
-        const branchSalesCash = data.sales.cashSales.filter(s => s.branch === branch);
-        const branchSalesCredit = data.sales.creditSales.filter(s => s.branch === branch);
-        const branchPurchases = data.purchases.filter(p => p.branch === branch);
-        const branchInventory = data.inventory.filter(i => i.branch === branch);
-        const branchSuppliers = data.suppliers.filter(s => s.branch === branch);
+        // Filter data based on branch
+        const filterByBranch = (list) => {
+            if (branch === 'All') return list;
+            return list.filter(item => item.branch === branch);
+        };
+
+        const branchSalesCash = filterByBranch(data.sales.cashSales);
+        const branchSalesCredit = filterByBranch(data.sales.creditSales);
+        const branchPurchases = filterByBranch(data.purchases);
+        const branchInventory = filterByBranch(data.inventory);
+        const branchSuppliers = filterByBranch(data.suppliers);
 
         // Calculate Metrics
         const totalStockQty = branchInventory.reduce((sum, i) => sum + i.quantity, 0);
@@ -66,14 +95,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         // Calculate "To be received" (Pending Purchases)
         const toBeReceived = branchPurchases
-            .filter(p => p.paymentStatus && p.paymentStatus === 'Pending')
+            .filter(p => {
+                if (!p.deliveryDate) return false;
+                const dDate = new Date(p.deliveryDate);
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                return dDate > today;
+            })
             .reduce((sum, p) => sum + (p.tonnage || 0), 0);
         
         // Update Stats Cards
         const invInHandEl = document.getElementById('invInHand');
         const invToReceiveEl = document.getElementById('invToReceive');
-        if (invInHandEl) invInHandEl.textContent = totalStockQty.toLocaleString();
-        if (invToReceiveEl) invToReceiveEl.textContent = toBeReceived.toLocaleString();
+        if (invInHandEl) invInHandEl.textContent = `${totalStockQty.toLocaleString()} KG`;
+        if (invToReceiveEl) invToReceiveEl.textContent = `${toBeReceived.toLocaleString()} KG`;
 
         const cards = document.querySelectorAll('.stat-card');
         if (cards.length >= 4) {
@@ -95,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const lowStockContainer = document.querySelector('.low-stock-items');
         if (lowStockContainer) {
             lowStockContainer.innerHTML = '';
-            const lowStockItems = branchInventory.filter(i => i.quantity < 100).slice(0, 3);
+            const lowStockItems = branchInventory.filter(i => i.quantity <= 500).slice(0, 3);
             
             if (lowStockItems.length === 0) {
                 lowStockContainer.innerHTML = '<p class="p-3 text-muted">All stock levels are healthy.</p>';
@@ -105,7 +140,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     itemDiv.className = 'stock-item';
                     itemDiv.innerHTML = `
                         <div class="stock-details">
-                            <h4>${item.produceName}</h4>
+                            <h4>${item.produceName} ${branch === 'All' ? `(${item.branch})` : ''}</h4>
                             <p>Remaining Quantity : ${item.quantity.toLocaleString()} kg</p>
                         </div>
                     `;
@@ -133,12 +168,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 topSellingTableBody.innerHTML = '<tr><td colspan="4" class="text-center py-3">No sales recorded yet.</td></tr>';
             } else {
                 sortedSales.forEach(([name, stats]) => {
-                    const invItem = branchInventory.find(i => i.produceName === name);
+                    // For 'All' branch, finding invItem might be tricky if it's in multiple branches. 
+                    // Let's aggregate for the table view.
+                    const totalQty = branchInventory.filter(i => i.produceName === name).reduce((sum, i) => sum + i.quantity, 0);
+                    
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${name}</td>
                         <td>${stats.qty.toLocaleString()} kg</td>
-                        <td>${invItem ? invItem.quantity.toLocaleString() : 0} kg</td>
+                        <td>${totalQty.toLocaleString()} kg</td>
                         <td>UGX ${stats.revenue.toLocaleString()}</td>
                     `;
                     topSellingTableBody.appendChild(tr);
@@ -161,10 +199,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const outOfStock = inventory.filter(i => i.quantity === 0);
         
         if (outOfStock.length > 0) {
-            const list = outOfStock.map(i => i.produceName).join(', ');
+            const list = outOfStock.map(i => `${i.produceName}${branchSelector.value === 'All' ? ` (${i.branch})` : ''}`).join(', ');
             alertContainer.innerHTML = `
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; border: none; background: #fee2e2; color: #991b1b;">
-                    <strong>Out of Stock Alert:</strong> The following items are out of stock in your branch: <strong>${list}</strong>. Please restock immediately.
+                    <strong>Out of Stock Alert:</strong> The following items are out of stock ${branchSelector.value === 'All' ? 'across branches' : 'in your branch'}: <strong>${list}</strong>. Please restock immediately.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
@@ -173,10 +211,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    function drawCharts(data) {
-        const branch = session.branch || 'Maganjo';
-        const branchSales = data.sales.cashSales.filter(s => s.branch === branch);
-        const branchPurchases = data.purchases.filter(p => p.branch === branch);
+    function drawCharts(data, selectedBranch) {
+        const branch = selectedBranch || 'All';
+        const filterByBranch = (list) => {
+            if (branch === 'All') return list;
+            return list.filter(item => item.branch === branch);
+        };
+
+        const branchSales = filterByBranch(data.sales.cashSales);
+        const branchPurchases = filterByBranch(data.purchases);
 
         const monthlyData = {};
         

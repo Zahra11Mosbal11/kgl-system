@@ -17,6 +17,13 @@ function initProcurementForm() {
         return;
     }
 
+    const session = JSON.parse(localStorage.getItem("currentSession"));
+    const isGlobalUser = session && (session.role === 'manager' || session.role === 'director');
+    if (isGlobalUser) {
+        const branchContainer = document.getElementById("branchFieldContainer");
+        if (branchContainer) branchContainer.style.display = "block";
+    }
+
     const qtyInput = document.getElementById("quantity");
     const priceInput = document.getElementById("price");
     const totalInput = document.getElementById("total");
@@ -106,6 +113,14 @@ function initProcurementForm() {
         }
 
         const session = JSON.parse(localStorage.getItem("currentSession"));
+        const isGlobalUser = session && (session.role === 'manager' || session.role === 'director');
+
+        // Show/Hide branch selection based on role
+        const branchContainer = document.getElementById("branchFieldContainer");
+        const branchSelect = document.getElementById("branchSelect");
+        if (isGlobalUser && branchContainer) {
+            branchContainer.style.display = "block";
+        }
         
         const payload = {
             produceName: product,
@@ -117,7 +132,7 @@ function initProcurementForm() {
             sellingPrice: sellingPrice,
             date: date,
             time: new Date().toTimeString().split(' ')[0],
-            branch: (session && session.branch) ? session.branch : 'Maganjo',
+            branch: isGlobalUser ? (branchSelect ? branchSelect.value : 'Maganjo') : (session && session.branch ? session.branch : 'Maganjo'),
             paymentMethod: paymentMethod.value,
             paymentStatus: paymentStatus.value,
             deliveryDate: (deliveryInput ? deliveryInput.value : date),

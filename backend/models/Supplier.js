@@ -21,7 +21,7 @@ const supplierSchema = new mongoose.Schema({
   }],
   branch: {
     type: String,
-    enum: ['Maganjo', 'Matugga'],
+    enum: ['Maganjo', 'Matugga', 'All'],
     required: true
   },
   lastDelivery: {

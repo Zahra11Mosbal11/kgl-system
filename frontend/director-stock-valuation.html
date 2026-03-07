@@ -62,7 +62,17 @@
       <div class="main-content">
         <!-- Header Section -->
         <div class="header">
-          <div class="header-user-info"><h2 id="welcomeMsg">Stock Valuation <span>(Director)</span></h2><p id="branchName" class="text-muted small mb-0"></p></div>
+          <div class="header-user-info">
+            <h2 id="welcomeMsg">Stock Valuation <span>(Director)</span></h2>
+            <div class="d-flex align-items-center gap-2">
+              <p id="branchName" class="text-muted small mb-0"></p>
+              <select id="branchSelector" class="form-select form-select-sm" style="width: auto; display: none;">
+                <option value="All">All Branches</option>
+                <option value="Maganjo">Maganjo</option>
+                <option value="Matugga">Matugga</option>
+              </select>
+            </div>
+          </div>
           <div class="header-icons">
             <img src="assets/icons/bell.svg" alt="" />
           </div>
@@ -85,7 +95,6 @@
               <div class="overview-card">
                 <h3 class="card-title-custom" style="margin-bottom: 10px; ">Low Stock Alerts (Global)</h3>
                 <h2 class="card-value" id="lowStockAlertCount" style="color: #a34b59;">... Items</h2>
-                <span class=" small" style="color: #a34b59;">Below safety margin in 2 locations</span>
               </div>
             </div>
           <!-- Charts Row -->

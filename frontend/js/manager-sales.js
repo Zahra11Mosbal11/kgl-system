@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // Search and Filter Logic
+    const searchInput = document.getElementById('salesSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn:not([type="date"])');
+    const branchSelector = document.getElementById('branchSelector');
+
     let allSalesData = [];
 
     // Fetch Sales Data
@@ -29,16 +34,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await api.get('/sales');
             if (response.success) {
-                const branch = session.branch || 'Maganjo';
-                const cashSales = (response.cashSales || []).filter(s => s.branch === branch).map(s => ({...s, type: 'cash'}));
-                const creditSales = (response.creditSales || []).filter(s => s.branch === branch).map(s => ({
+                const cashSales = (response.cashSales || []).map(s => ({...s, type: 'cash'}));
+                const creditSales = (response.creditSales || []).map(s => ({
                     ...s, 
                     type: 'credit',
                     date: s.dispatchDate || s.createdAt // Normalize date field
                 }));
                 
                 allSalesData = [...cashSales, ...creditSales].sort((a,b) => new Date(b.date) - new Date(a.date));
-                renderSalesTable(allSalesData);
+                filterTable();
             }
         } catch (error) {
             console.error("Error fetching sales data:", error);
@@ -65,9 +69,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const statusText = item.type === 'cash' ? 'Paid' : 'Credit';
             const amount = item.type === 'cash' ? (item.amountPaid || 0) : (item.amountDue || 0);
 
+            const hasBranchColumn = branchSelector && branchSelector.value === 'All';
+
             tr.innerHTML = `
                 <td>#REC-${item._id.slice(-6).toUpperCase()}</td>
                 <td>${dateStr}</td>
+                ${hasBranchColumn ? `<td>${item.branch}</td>` : ''}
                 <td>${item.customerName || item.buyerName || 'Walk-in'}</td>
                 <td>${item.produceName} (${item.tonnage.toLocaleString()} kg)</td>
                 <td>UGX ${amount.toLocaleString()}</td>
@@ -76,6 +83,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             tableBody.appendChild(tr);
         });
 
+        // Update Header if needed
+        const headerRow = document.querySelector('.clients-table thead tr');
+        if (headerRow) {
+            const hasBranchHeader = headerRow.innerText.includes('Branch');
+            const shouldHaveBranchHeader = branchSelector && branchSelector.value === 'All';
+            
+            if (shouldHaveBranchHeader && !hasBranchHeader) {
+                const th = document.createElement('th');
+                th.textContent = 'Branch';
+                headerRow.insertBefore(th, headerRow.children[2]);
+            } else if (!shouldHaveBranchHeader && hasBranchHeader) {
+                headerRow.children[2].remove();
+            }
+        }
+
         // Remove loading state
         document.querySelector('.sales-table-container')?.classList.remove('loading');
     }
@@ -83,13 +105,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Initial Load
     await window.loadSales();
 
-    // Search and Filter Logic
-    const searchInput = document.getElementById('salesSearch');
-    const filterBtns = document.querySelectorAll('.filter-btn:not([type="date"])');
+    if (branchSelector) {
+        if (session.role === 'manager' || session.role === 'director') {
+            branchSelector.style.display = 'none'; // Divisions canceled for managers
+            branchSelector.value = 'All';
+        } else {
+            branchSelector.style.display = 'block';
+            branchSelector.value = session.branch;
+        }
+
+        branchSelector.addEventListener('change', () => {
+            filterTable();
+        });
+    }
 
     function filterTable() {
         const searchTerm = (searchInput?.value || "").toLowerCase();
         const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+        const selectedBranch = branchSelector ? branchSelector.value : session.branch;
 
         const filteredData = allSalesData.filter(item => {
             const customer = (item.customerName || item.buyerName || 'Walk-in').toLowerCase();
@@ -97,8 +130,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const matchesSearch = customer.includes(searchTerm) || product.includes(searchTerm) || item._id.includes(searchTerm);
             
             const matchesFilter = activeFilter === 'all' || activeFilter === item.type;
-            
-            return matchesSearch && matchesFilter;
+            const matchesBranch = selectedBranch === 'All' || item.branch === selectedBranch;
+
+            return matchesSearch && matchesFilter && matchesBranch;
         });
 
         renderSalesTable(filteredData);

@@ -46,8 +46,8 @@ router.get('/', requireAuth, async (req, res) => {
   try {
     let query = {};
     if (req.user.role === 'sales_agent') {
-      query.recordedBy = req.user.id;
-    } else if (req.user.role === 'manager') {
+      query.branch = req.user.branch;
+    } else if (req.user.role === 'manager' && req.user.branch !== 'All') {
       query.branch = req.user.branch;
     }
     const clients = await Client.find(query).sort({ name: 1 });

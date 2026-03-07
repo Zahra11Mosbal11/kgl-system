@@ -16,7 +16,7 @@ const seedDatabase = async () => {
       password: password,
       role: 'director',
       fullName: 'System Director',
-      branch: 'Maganjo',
+      branch: 'All',
       phone: '0770000000'
     });
 
@@ -26,28 +26,40 @@ const seedDatabase = async () => {
       password: password,
       role: 'manager',
       fullName: 'Ahmed Manager',
-      branch: 'Maganjo',
+      branch: 'All',
       phone: '0777123456'
     });
     
-    // create sales agent user
-    const salesAgent = new User({
+    // create sales agent 1 (Maganjo)
+    const sales1 = new User({
       username: 'sales1',
       password: password,
       role: 'sales_agent',
-      fullName: 'Mohamed Sales',
-      branch: 'Matugga',
+      fullName: 'Mohamed ',
+      branch: 'Maganjo',
       phone: '0788123456'
+    });
+
+    // create sales agent 2 (Matugga)
+    const sales2 = new User({
+      username: 'sales2',
+      password: password,
+      role: 'sales_agent',
+      fullName: 'Zahra ',
+      branch: 'Matugga',
+      phone: '0788654321'
     });
     
     await director.save();
     await manager.save();
-    await salesAgent.save();
+    await sales1.save();
+    await sales2.save();
     
     console.log(' Database seeded successfully');
     console.log(`Director: director1 / ${password}`);
     console.log(`Manager: manager1 / ${password}`);
-    console.log(`Sales Agent: sales1 / ${password}`);
+    console.log(`Sales Agent (Maganjo): sales1 / ${password}`);
+    console.log(`Sales Agent (Matugga): sales2 / ${password}`);
 
     
     process.exit(0);

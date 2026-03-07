@@ -80,8 +80,9 @@ router.post('/', requireManager, async (req, res) => {
     
     await purchase.save();
     
-    // Update inventory ONLY if Paid
-    if (purchase.paymentStatus === 'Paid') {
+    // Update inventory ONLY if Delivered (deliveryDate is today or earlier)
+    const isDelivered = new Date(purchase.deliveryDate) <= new Date();
+    if (isDelivered) {
       await Inventory.findOneAndUpdate(
         { produceName: purchase.produceName, branch: purchase.branch },
         { 

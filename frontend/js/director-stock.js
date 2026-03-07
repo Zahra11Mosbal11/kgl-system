@@ -22,118 +22,222 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // Branch Selector Initialization
+    const branchSelector = document.getElementById('branchSelector');
+    if (branchSelector) {
+        branchSelector.style.display = 'none'; // All data by default
+        branchSelector.value = 'All';
+        
+        branchSelector.addEventListener('change', () => {
+            if (stockData) {
+                updateStockUI(stockData);
+                renderCharts(stockData);
+            }
+        });
+    }
+
+    let stockData = null;
+
     // Fetch and Update Stock Data
     try {
         const response = await api.get('/inventory/valuation');
         if (response.success) {
-            updateStockUI(response);
-            renderCharts(response);
+            stockData = response;
+            updateStockUI(stockData);
+            renderCharts(stockData);
         }
     } catch (error) {
         console.error("Error fetching stock valuation:", error);
     }
 
     function updateStockUI(data) {
+        const branch = branchSelector ? branchSelector.value : 'All';
+
         // Summary Cards
         const totalValueCard = document.getElementById('totalStockValue');
         if (totalValueCard) {
-            totalValueCard.textContent = `UGX ${(data.totalValuation.totalCostValue / 1000000).toFixed(1)}M`;
+            let val = data.totalValuation.totalCostValue;
+            if (branch === 'Maganjo') val = data.totalValuation.maganjoCostValue;
+            else if (branch === 'Matugga') val = data.totalValuation.matuggaCostValue;
+            totalValueCard.textContent = `UGX ${(val / 1000000).toFixed(1)}M`;
         }
 
         const lowStockCard = document.getElementById('lowStockAlertCount');
         if (lowStockCard) {
-            const lowStockItems = data.inventory.filter(i => i.quantity < 500);
+            const lowStockItems = data.inventory.filter(i => {
+                const matchesBranch = branch === 'All' || i.branch === branch;
+                return matchesBranch && i.quantity <= 500;
+            });
             lowStockCard.textContent = `${lowStockItems.length} Items`;
+            
+            const cardHeader = lowStockCard.previousElementSibling;
+            if (cardHeader) cardHeader.textContent = `Low Stock Alerts (${branch})`;
         }
 
         // Progress Bars
         const maganjoBar = document.getElementById('maganjoBar');
         const matuggaBar = document.getElementById('matuggaBar');
-        if (maganjoBar && matuggaBar && data.totalValuation.totalCostValue > 0) {
-            const maganjoPercent = (data.branchBreakdown.Maganjo.costValue / data.totalValuation.totalCostValue) * 100;
-            const matuggaPercent = (data.branchBreakdown.Matugga.costValue / data.totalValuation.totalCostValue) * 100;
-            
-            maganjoBar.style.width = `${maganjoPercent}%`;
-            maganjoBar.setAttribute('aria-valuenow', maganjoPercent.toFixed(0));
-            
-            matuggaBar.style.width = `${matuggaPercent}%`;
-            matuggaBar.setAttribute('aria-valuenow', matuggaPercent.toFixed(0));
+        if (maganjoBar && matuggaBar) {
+            if (branch === 'Maganjo') {
+                maganjoBar.style.width = '100%';
+                matuggaBar.style.width = '0%';
+            } else if (branch === 'Matugga') {
+                maganjoBar.style.width = '0%';
+                matuggaBar.style.width = '100%';
+            } else {
+                const total = data.totalValuation.totalCostValue || 1;
+                maganjoBar.style.width = `${(data.totalValuation.maganjoCostValue / total) * 100}%`;
+                matuggaBar.style.width = `${(data.totalValuation.matuggaCostValue / total) * 100}%`;
+            }
         }
 
         // Stock Table
         const tableBody = document.getElementById('stockTableBody');
+        const tableHeader = document.querySelector('.table.table-hover thead tr');
         if (tableBody) {
             tableBody.innerHTML = '';
             
-            // Group by produce name
-            const grouped = {};
-            data.inventory.forEach(item => {
-                if (!grouped[item.produceName]) {
-                    grouped[item.produceName] = { Maganjo: 0, Matugga: 0, totalValue: 0 };
+            // Adjust headers based on branch
+            if (tableHeader) {
+                if (branch === 'All') {
+                    tableHeader.innerHTML = `
+                        <th>Product</th>
+                        <th>Maganjo (KG)</th>
+                        <th>Matugga (KG)</th>
+                        <th>Total Value</th>
+                        <th>Status</th>
+                    `;
+                } else {
+                    tableHeader.innerHTML = `
+                        <th>Product</th>
+                        <th>${branch} Quantity (KG)</th>
+                        <th>Unit Value</th>
+                        <th>Total Value</th>
+                        <th>Status</th>
+                    `;
                 }
-                grouped[item.produceName][item.branch] += item.quantity;
-                grouped[item.produceName].totalValue += item.stockValue;
-            });
+            }
 
-            Object.entries(grouped).forEach(([name, branchData]) => {
-                const tr = document.createElement('tr');
-                const totalQty = branchData.Maganjo + branchData.Matugga;
-                let statusBadge = '<span class="badge bg-success">Adequate</span>';
-                if (totalQty < 200) statusBadge = '<span class="badge bg-danger">Critical</span>';
-                else if (totalQty < 1000) statusBadge = '<span class="badge bg-warning">Low Stock</span>';
+            // Group inventory by produceName if 'All' branch
+            let itemsToRender = [];
+            if (branch === 'All') {
+                const grouped = {};
+                data.inventory.forEach(i => {
+                    if (!grouped[i.produceName]) grouped[i.produceName] = { produceName: i.produceName, Maganjo: 0, Matugga: 0, value: 0 };
+                    grouped[i.produceName][i.branch] = i.quantity;
+                    grouped[i.produceName].value += (i.quantity * i.latestCost);
+                });
+                itemsToRender = Object.values(grouped);
+            } else {
+                itemsToRender = data.inventory.filter(i => i.branch === branch).map(i => ({
+                    ...i,
+                    value: i.quantity * i.latestCost
+                }));
+            }
 
-                tr.innerHTML = `
-                    <td>${name}</td>
-                    <td>${branchData.Maganjo.toLocaleString()}</td>
-                    <td>${branchData.Matugga.toLocaleString()}</td>
-                    <td>UGX ${(branchData.totalValue / 1000000).toFixed(1)}M</td>
-                    <td>${statusBadge}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
+            if (itemsToRender.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">No stock found for ${branch}.</td></tr>`;
+            } else {
+                itemsToRender.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const totalQty = branch === 'All' ? (item.Maganjo + item.Matugga) : item.quantity;
+                    const statusClass = totalQty <= 500 ? 'text-danger' : 'text-success';
+                    const statusText = totalQty <= 500 ? 'Low Stock' : 'Healthy';
+
+                    if (branch === 'All') {
+                        tr.innerHTML = `
+                            <td><strong>${item.produceName}</strong></td>
+                            <td>${item.Maganjo.toLocaleString()}</td>
+                            <td>${item.Matugga.toLocaleString()}</td>
+                            <td>UGX ${item.value.toLocaleString()}</td>
+                            <td><span class="${statusClass}">${statusText}</span></td>
+                        `;
+                    } else {
+                        tr.innerHTML = `
+                            <td><strong>${item.produceName}</strong></td>
+                            <td>${item.quantity.toLocaleString()}</td>
+                            <td>UGX ${item.latestCost.toLocaleString()}</td>
+                            <td>UGX ${item.value.toLocaleString()}</td>
+                            <td><span class="${statusClass}">${statusText}</span></td>
+                        `;
+                    }
+                    tableBody.appendChild(tr);
+                });
+            }
         }
     }
 
     function renderCharts(data) {
-        const grouped = {};
-        data.inventory.forEach(item => {
-            if (!grouped[item.produceName]) grouped[item.produceName] = { Maganjo: 0, Matugga: 0, totalVal: 0 };
-            grouped[item.produceName][item.branch] += item.quantity;
-            grouped[item.produceName].totalVal += item.stockValue;
-        });
+        const branch = branchSelector ? branchSelector.value : 'All';
 
-        const labels = Object.keys(grouped);
-        const maganjoData = labels.map(l => grouped[l].Maganjo);
-        const matuggaData = labels.map(l => grouped[l].Matugga);
+        // Distribution Chart
+        const distributionCtx = document.getElementById("stockCerealChart")?.getContext("2d");
+        if (distributionCtx) {
+            if (window.distChart) window.distChart.destroy();
+            
+            const labels = [...new Set(data.inventory.map(i => i.produceName))];
+            const maganjoData = labels.map(l => {
+                const item = data.inventory.find(i => i.produceName === l && i.branch === 'Maganjo');
+                return item ? item.quantity : 0;
+            });
+            const matuggaData = labels.map(l => {
+                const item = data.inventory.find(i => i.produceName === l && i.branch === 'Matugga');
+                return item ? item.quantity : 0;
+            });
 
-        const cerealCtx = document.getElementById('stockCerealChart');
-        if (cerealCtx) {
-            new Chart(cerealCtx.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Maganjo (KG)', data: maganjoData, backgroundColor: '#2ecc71' },
-                        { label: 'Matugga (KG)', data: matuggaData, backgroundColor: '#3498db' }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true }, x: { stacked: true } } }
+            let datasets = [];
+            if (branch === 'All' || branch === 'Maganjo') {
+                datasets.push({
+                    label: "Maganjo Stock (kg)",
+                    data: maganjoData,
+                    backgroundColor: "#7367f0",
+                });
+            }
+            if (branch === 'All' || branch === 'Matugga') {
+                datasets.push({
+                    label: "Matugga Stock (kg)",
+                    data: matuggaData,
+                    backgroundColor: "#00cfe8",
+                });
+            }
+
+            window.distChart = new Chart(distributionCtx, {
+                type: "bar",
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
             });
         }
 
-        const valueCtx = document.getElementById('stockValueChart');
+        // Value Pie Chart
+        const valueCtx = document.getElementById("stockValueChart")?.getContext("2d");
         if (valueCtx) {
-            const valueData = labels.map(l => grouped[l].totalVal);
-            new Chart(valueCtx.getContext('2d'), {
-                type: 'doughnut',
+            if (window.vChart) window.vChart.destroy();
+            
+            const grouped = {};
+            data.inventory.forEach(i => {
+                if (branch === 'All' || i.branch === branch) {
+                   grouped[i.produceName] = (grouped[i.produceName] || 0) + (i.quantity * i.latestCost);
+                }
+            });
+
+            window.vChart = new Chart(valueCtx, {
+                type: "doughnut",
                 data: {
-                    labels: labels,
+                    labels: Object.keys(grouped),
                     datasets: [{
-                        data: valueData,
-                        backgroundColor: ['#f1c40f', '#e67e22', '#95a5a6', '#7367f0', '#28c76f']
+                        data: Object.values(grouped),
+                        backgroundColor: ["#7367f0", "#28c76f", "#ff9f43", "#ea5455", "#00cfe8"]
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
             });
         }
     }

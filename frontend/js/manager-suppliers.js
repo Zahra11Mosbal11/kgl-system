@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // Search and Filter Logic
+    const searchInput = document.getElementById('supplierSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const branchSelector = document.getElementById('branchSelector');
+
     let suppliersData = [];
 
     // Fetch Suppliers Data
@@ -29,8 +34,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await api.get('/suppliers');
             if (response.success) {
-                suppliersData = response.suppliers.filter(s => s.branch === session.branch);
-                renderSuppliersTable(suppliersData);
+                suppliersData = response.suppliers;
+                filterTable();
             }
         } catch (error) {
             console.error("Error fetching suppliers data:", error);
@@ -55,6 +60,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const lastDelivery = item.lastDelivery ? new Date(item.lastDelivery).toLocaleDateString() : '-';
             const statusClass = item.status === 'Active' ? 'active' : 'inactive';
 
+            const hasBranchColumn = branchSelector && branchSelector.value === 'All';
+
             tr.innerHTML = `
                 <td>
                     <div class="client-details">
@@ -62,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p>ID: ${item._id.slice(-6).toUpperCase()}</p>
                     </div>
                 </td>
+                ${hasBranchColumn ? `<td>${item.branch}</td>` : ''}
                 <td>${item.contact}</td>
                 <td>${(item.productsSupplied || []).join(', ') || '-'}</td>
                 <td><span class="badge ${statusClass}">${item.status || 'Active'}</span></td>
@@ -70,6 +78,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             tableBody.appendChild(tr);
         });
 
+        // Update Header if needed
+        const headerRow = document.querySelector('.clients-table thead tr');
+        if (headerRow) {
+            const hasBranchHeader = headerRow.innerText.includes('Branch');
+            const shouldHaveBranchHeader = branchSelector && branchSelector.value === 'All';
+            
+            if (shouldHaveBranchHeader && !hasBranchHeader) {
+                const th = document.createElement('th');
+                th.textContent = 'Branch';
+                headerRow.insertBefore(th, headerRow.children[1]);
+            } else if (!shouldHaveBranchHeader && hasBranchHeader) {
+                headerRow.children[1].remove();
+            }
+        }
+
         // Remove loading state
         document.querySelector('.table-section')?.classList.remove('loading');
     }
@@ -77,13 +100,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Initial Load
     await window.loadSuppliers();
 
-    // Search and Filter Logic
-    const searchInput = document.getElementById('supplierSearch');
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    if (branchSelector) {
+        if (session.role === 'manager' || session.role === 'director') {
+            branchSelector.style.display = 'none'; // Divisions canceled for managers
+            branchSelector.value = 'All';
+        } else {
+            branchSelector.style.display = 'block';
+            branchSelector.value = session.branch || 'Maganjo';
+        }
+
+        branchSelector.addEventListener('change', () => {
+            filterTable();
+        });
+    }
 
     function filterTable() {
         const searchTerm = (searchInput?.value || "").toLowerCase();
         const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+        const selectedBranch = branchSelector ? branchSelector.value : session.branch;
 
         const filteredData = suppliersData.filter(item => {
             const rowStr = `${item.name} ${item.contact} ${item.contactPerson}`.toLowerCase();
@@ -91,8 +125,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             const status = item.status?.toLowerCase() || 'active';
             const matchesFilter = activeFilter === 'all' || activeFilter === status;
+            const matchesBranch = selectedBranch === 'All' || item.branch === selectedBranch;
             
-            return matchesSearch && matchesFilter;
+            return matchesSearch && matchesFilter && matchesBranch;
         });
 
         renderSuppliersTable(filteredData);

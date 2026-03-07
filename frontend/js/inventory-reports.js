@@ -75,8 +75,8 @@ function renderReport() {
         const quantity = item.quantity || 0;
         
         if (statusValue === 'all') return true;
-        if (statusValue === 'in-stock') return quantity >= 1000;
-        if (statusValue === 'low-stock') return quantity > 0 && quantity < 1000;
+        if (statusValue === 'in-stock') return quantity > 500;
+        if (statusValue === 'low-stock') return quantity > 0 && quantity <= 500;
         if (statusValue === 'out-of-stock') return quantity === 0;
         
         return true;
@@ -88,10 +88,12 @@ function renderReport() {
         reportTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No inventory items found for selected filter</td></tr>';
     } else {
         filteredData.forEach(item => {
+            const tr = document.createElement('tr');
+            
             const quantity = item.quantity || 0;
             let statusBadge = '';
             
-            if (quantity >= 500) {
+            if (quantity > 500) {
                 statusBadge = '<span class="badge active">In Stock</span>';
             } else if (quantity > 0) {
                 statusBadge = '<span class="badge credit">Low Stock</span>';
@@ -102,16 +104,14 @@ function renderReport() {
             const totalValue = (quantity * (item.latestCost || 0)).toLocaleString();
             const unitPrice = (item.latestCost || 0).toLocaleString();
 
-            const row = `
-                <tr>
-                    <td style="text-transform: capitalize;">${item.produceName}</td>
-                    <td>${quantity.toLocaleString()} Tonnes</td>
-                    <td>UGX ${unitPrice}</td>
-                    <td>UGX ${totalValue}</td>
-                    <td>${statusBadge}</td>
-                </tr>
+            tr.innerHTML = `
+                <td style="text-transform: capitalize;">${item.produceName}</td>
+                <td>${quantity.toLocaleString()} Tonnes</td>
+                <td>UGX ${unitPrice}</td>
+                <td>UGX ${totalValue}</td>
+                <td>${statusBadge}</td>
             `;
-            reportTableBody.innerHTML += row;
+            reportTableBody.appendChild(tr);
         });
     }
 }

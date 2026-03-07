@@ -65,7 +65,7 @@ const creditSaleSchema = new mongoose.Schema({
   },
   branch: {
     type: String,
-    enum: ['Maganjo', 'Matugga'],
+    enum: ['Maganjo', 'Matugga', 'All'],
     required: true
   },
   recordedBy: {

@@ -118,20 +118,25 @@ function renderReport() {
 
     reportTableBody.innerHTML = '';
     if (filteredData.length === 0) {
-        reportTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No records found for selected filters</td></tr>';
+        reportTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No records found for selected filters</td></tr>';
     } else {
         filteredData.forEach(item => {
-            const row = `
-                <tr>
-                    <td>${new Date(item.date).toLocaleDateString()}</td>
-                    <td>${item.dealerName}</td>
-                    <td style="text-transform: capitalize;">${item.produceName}</td>
-                    <td>${item.tonnage.toLocaleString()} KG</td>
-                    <td>UGX ${item.cost.toLocaleString()}</td>
-                    <td><span class="badge active">Received</span></td>
-                </tr>
+            const tr = document.createElement('tr');
+            
+            const isDelivered = item.deliveryDate && new Date(item.deliveryDate) <= new Date();
+            const deliveryBadge = isDelivered ? '<span class="badge active">Received</span>' : '<span class="badge credit">In Way</span>';
+            const paymentBadge = item.paymentStatus === 'Paid' ? '<span class="badge bg-info">Paid</span>' : '<span class="badge bg-secondary">Pending</span>';
+            
+            tr.innerHTML = `
+                <td>${new Date(item.date).toLocaleDateString()}</td>
+                <td>${item.dealerName}</td>
+                <td style="text-transform: capitalize;">${item.produceName}</td>
+                <td>${item.tonnage.toLocaleString()} KG</td>
+                <td>UGX ${item.cost.toLocaleString()}</td>
+                <td>${deliveryBadge}</td>
+                <td>${paymentBadge}</td>
             `;
-            reportTableBody.innerHTML += row;
+            reportTableBody.appendChild(tr);
         });
     }
 }

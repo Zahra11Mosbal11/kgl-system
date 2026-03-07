@@ -41,12 +41,19 @@ function initSalesForm() {
     // Get current session for branch and user info
     const sessionString = localStorage.getItem("currentSession");
     let currentUserBranch = "";
+    let isGlobalUser = false;
     if (sessionString) {
         const session = JSON.parse(sessionString);
         currentUserBranch = session.branch;
+        isGlobalUser = session.role === 'manager' || session.role === 'director';
         const agentInput = document.getElementById("salesAgentName");
         if (session && session.username && agentInput) {
             agentInput.value = session.username;
+        }
+
+        if (isGlobalUser) {
+            const branchContainer = document.getElementById("salesBranchFieldContainer");
+            if (branchContainer) branchContainer.style.display = "block";
         }
     }
 
@@ -57,11 +64,32 @@ function initSalesForm() {
             // 1. Fetch Inventory for dropdown
             const invData = await api.get("/inventory");
             if (invData.success) {
-                // If branch is provided (manager/agent specific), filter inventory
-                if (currentUserBranch) {
-                    branchInventory = invData.inventory.filter(i => i.branch === currentUserBranch);
-                } else {
-                    branchInventory = invData.inventory;
+                const branchSelect = document.getElementById("salesBranchSelect");
+                const getEffectiveBranch = () => {
+                   if (isGlobalUser && branchSelect) return branchSelect.value;
+                   return currentUserBranch;
+                };
+
+                const updateProductDropdown = () => {
+                    const effectiveBranch = getEffectiveBranch();
+                    branchInventory = invData.inventory.filter(i => i.branch === effectiveBranch);
+                    
+                    const productSelect = document.getElementById("produceName");
+                    productSelect.innerHTML = '<option value="">Select a product...</option>';
+                    branchInventory.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.produceName;
+                        option.textContent = `${item.produceName} (${item.quantity} T)`;
+                        productSelect.appendChild(option);
+                    });
+                     // Clear subtotal/total on branch change
+                     if (tonnageInput) calculate();
+                };
+
+                updateProductDropdown();
+
+                if (isGlobalUser && branchSelect) {
+                    branchSelect.addEventListener("change", updateProductDropdown);
                 }
                 
                 const productSelect = document.getElementById("produceName");
@@ -217,6 +245,7 @@ function initSalesForm() {
             return;
         }
 
+        const branchSelect = document.getElementById("salesBranchSelect");
         const payload = {
             produceName: data.produceName,
             tonnage: parseFloat(data.tonnage),
@@ -224,7 +253,7 @@ function initSalesForm() {
             contact: data.contact,
             salesAgentName: data.salesAgentName,
             notes: data.notes,
-            branch: currentUserBranch
+            branch: isGlobalUser ? (branchSelect ? branchSelect.value : 'Maganjo') : currentUserBranch
         };
 
         let endpoint = "/sales/cash";

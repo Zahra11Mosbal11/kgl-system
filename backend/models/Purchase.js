@@ -42,7 +42,7 @@ const purchaseSchema = new mongoose.Schema({
   },
   branch: {
     type: String,
-    enum: ['Maganjo', 'Matugga'],
+    enum: ['Maganjo', 'Matugga', 'All'],
     required: true
   },
   contact: {
@@ -81,7 +81,7 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: ""
-  }
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Purchase', purchaseSchema);

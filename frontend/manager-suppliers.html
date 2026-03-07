@@ -64,7 +64,17 @@
       <div class="main-content">
         <!-- Header Section -->
         <div class="header">
-          <div class="header-user-info"><h2 id="welcomeMsg">User <span>(Role)</span></h2><p id="branchName" class="text-muted small mb-0"></p></div>
+          <div class="header-user-info">
+            <h2 id="welcomeMsg">User <span>(Role)</span></h2>
+            <div class="d-flex align-items-center gap-2">
+              <p id="branchName" class="text-muted small mb-0"></p>
+              <select id="branchSelector" class="form-select form-select-sm" style="width: auto; display: none;">
+                <option value="All">All Branches</option>
+                <option value="Maganjo">Maganjo</option>
+                <option value="Matugga">Matugga</option>
+              </select>
+            </div>
+          </div>
           <div class="header-icons">
             <img src="assets/icons/bell.svg" alt="" />
             <img src="assets/icons/suppliers.svg" alt="" />

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function updateProcurementUI(purchases) {
         // Summary Cards
         const totalProcurement = purchases.reduce((sum, p) => sum + p.cost, 0);
-        const pendingCount = purchases.filter(p => p.paymentStatus?.toLowerCase() === 'pending').length;
+        const pendingCount = purchases.filter(p => p.deliveryDate && new Date(p.deliveryDate) > new Date()).length;
 
         const totalCardValue = document.getElementById('totalProcurementValue');
         if (totalCardValue) {
@@ -57,7 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             sorted.slice(0, 15).forEach(item => {
                 const tr = document.createElement('tr');
                 const dateStr = item.date ? new Date(item.date).toLocaleDateString() : '-';
-                const statusBadge = item.paymentStatus === 'Paid' ? '<span class="badge bg-success">Received</span>' : '<span class="badge bg-warning">Pending</span>';
+                const isDelivered = item.deliveryDate && new Date(item.deliveryDate) <= new Date();
+                const deliveryBadge = isDelivered ? '<span class="badge bg-success">Received</span>' : '<span class="badge bg-warning">In Way</span>';
+                const paymentBadge = item.paymentStatus === 'Paid' ? '<span class="badge bg-info">Paid</span>' : '<span class="badge bg-secondary">Pending</span>';
 
                 tr.innerHTML = `
                     <td>${dateStr}</td>
@@ -66,7 +68,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${item.branch}</td>
                     <td>${item.tonnage.toLocaleString()} kg</td>
                     <td>UGX ${(item.cost / 1000000).toFixed(1)}M</td>
-                    <td>${statusBadge}</td>
+                    <td>${deliveryBadge}</td>
+                    <td>${paymentBadge}</td>
                 `;
                 tableBody.appendChild(tr);
             });

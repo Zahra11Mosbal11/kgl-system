@@ -101,9 +101,13 @@ router.post("/cash", requireAuth, async (req, res) => {
     }
 
     // Check stock
-    const inventory = await Inventory.findOne({ produceName, branch: req.user.branch });
+    const effectiveBranch = (req.user.role === 'manager' || req.user.role === 'director') 
+      ? (req.body.branch || req.user.branch) 
+      : req.user.branch;
+
+    const inventory = await Inventory.findOne({ produceName, branch: effectiveBranch });
     if (!inventory || inventory.quantity < tonnage) {
-      return res.status(400).json({ error: `Insufficient stock. Available: ${inventory ? inventory.quantity : 0} tonnes` });
+      return res.status(400).json({ error: `Insufficient stock. Available: ${inventory ? inventory.quantity : 0} tonnes in ${effectiveBranch}` });
     }
 
     // get current time and date
@@ -114,7 +118,7 @@ router.post("/cash", requireAuth, async (req, res) => {
       ...req.body,
       date: now,
       time: timeString,
-      branch: req.user.branch,
+      branch: effectiveBranch,
       recordedBy: req.user.id,
     });
 
@@ -128,7 +132,7 @@ router.post("/cash", requireAuth, async (req, res) => {
         $set: { 
           name: sale.buyerName, 
           contact: sale.contact,
-          branch: req.user.branch
+          branch: effectiveBranch
         },
         $inc: { totalPurchases: 1 },
         $setOnInsert: {
@@ -235,14 +239,18 @@ router.post("/credit", requireAuth, async (req, res) => {
     }
 
     // Check stock
-    const inventory = await Inventory.findOne({ produceName: req.body.produceName, branch: req.user.branch });
+    const effectiveBranch = (req.user.role === 'manager' || req.user.role === 'director') 
+      ? (req.body.branch || req.user.branch) 
+      : req.user.branch;
+
+    const inventory = await Inventory.findOne({ produceName: req.body.produceName, branch: effectiveBranch });
     if (!inventory || inventory.quantity < tonnage) {
-      return res.status(400).json({ error: `Insufficient stock. Available: ${inventory ? inventory.quantity : 0} tonnes` });
+      return res.status(400).json({ error: `Insufficient stock. Available: ${inventory ? inventory.quantity : 0} tonnes in ${effectiveBranch}` });
     }
 
     const creditSale = new CreditSale({
       ...req.body,
-      branch: req.user.branch,
+      branch: effectiveBranch,
       recordedBy: req.user.id,
     });
 
@@ -260,7 +268,7 @@ router.post("/credit", requireAuth, async (req, res) => {
           name: creditSale.buyerName, 
           contact: creditSale.contact,
           location: creditSale.location,
-          branch: req.user.branch,
+          branch: effectiveBranch,
           recordedBy: req.user.id
         }
       },
@@ -322,10 +330,10 @@ router.get("/", requireAuth, async (req, res) => {
     let query = {};
     if (req.user.role === 'sales_agent') {
       query.recordedBy = req.user.id;
-    } else if (req.user.role === 'manager') {
+    } else if (req.user.role === 'manager' && req.user.branch !== 'All') {
       query.branch = req.user.branch;
     }
-    // Director sees all, so query remains {}
+    // Director (and Managers with branch 'All') sees all, so query remains {}
 
     const cashSales = await CashSale.find(query).sort({ date: -1 });
     const creditSales = await CreditSale.find(query).sort({ date: -1 });

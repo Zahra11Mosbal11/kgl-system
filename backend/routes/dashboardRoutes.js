@@ -79,7 +79,7 @@ router.get('/director', requireAuth, requireRoles(['director']), async (req, res
         produceName: i.produceName,
         branch: i.branch,
         quantity: i.quantity,
-        status: i.quantity < 500 ? 'Low' : 'Healthy'
+        status: i.quantity <= 500 ? 'Low' : 'Healthy'
       }))
       .sort((a, b) => a.quantity - b.quantity)
       .slice(0, 5);
