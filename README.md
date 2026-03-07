@@ -55,6 +55,16 @@ Responsive Design – Mobile friendly
 ## login page: https://zahra11mosbal11.github.io/kgl-system/
 <img width="1189" height="651" alt="Screenshot 2026-03-05 at 11 30 42" src="https://github.com/user-attachments/assets/9a389a21-2167-4985-863b-155c6f9b10e1" />
 
+## Manager dashboard
+<img width="1440" height="744" alt="Screenshot 2026-03-08 at 01 10 47" src="https://github.com/user-attachments/assets/27560a1f-b83a-4a1e-b60e-6d6865010bf3" />
+
+## Director dashboard
+<img width="1440" height="744" alt="Screenshot 2026-03-08 at 01 11 20" src="https://github.com/user-attachments/assets/4abf7384-085d-4486-9fab-c0eb297275e8" />
+
+## Sales agents dashboard
+<img width="1440" height="744" alt="Screenshot 2026-03-08 at 01 11 56" src="https://github.com/user-attachments/assets/e00f949f-a185-43cc-85f4-3c32eefc1364" />
+
+
 
 
 
