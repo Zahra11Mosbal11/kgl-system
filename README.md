@@ -7,7 +7,7 @@ A modern web-based management system for Karibu Groceries LTD, designed to help 
 
 ## 📌 Project Overview
 
-KJL is a responsive web application built to support grocery store operations such as:
+KgL is a responsive web application built to support grocery store operations such as:
 
 Managing products and stock
 
