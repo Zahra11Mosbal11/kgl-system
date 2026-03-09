@@ -8,7 +8,7 @@ const seedDatabase = async () => {
     
     // delete existing users to avoid duplicates
     await User.deleteMany({});
-    const password = process.env.PASSWORD_USER || 'password123';
+    const password = process.env.PASSWORD_USER ;
     
     // create director user
     const director = new User({
