@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td>${sale._id.substring(sale._id.length - 6).toUpperCase()}</td>
         <td>${sale.produceName}</td>
-        <td>${sale.tonnage} Tonnes</td>
+        <td>${sale.tonnage} kg</td>
         <td>${(sale.amountPaid || sale.amountDue).toLocaleString()} UGX</td>
         <td class="${sale.type === 'credit' ? 'text-warning' : ''}">${sale.type.charAt(0).toUpperCase() + sale.type.slice(1)}</td>
       `;

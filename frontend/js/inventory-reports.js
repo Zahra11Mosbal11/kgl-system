@@ -106,7 +106,7 @@ function renderReport() {
 
             tr.innerHTML = `
                 <td style="text-transform: capitalize;">${item.produceName}</td>
-                <td>${quantity.toLocaleString()} Tonnes</td>
+                <td>${quantity.toLocaleString()} kg</td>
                 <td>UGX ${unitPrice}</td>
                 <td>UGX ${totalValue}</td>
                 <td>${statusBadge}</td>

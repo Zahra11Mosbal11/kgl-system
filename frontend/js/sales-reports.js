@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="text-transform: capitalize;">${prodName}</td>
-          <td>${stats.quantity.toLocaleString()} T</td>
+          <td>${stats.quantity.toLocaleString()} kg</td>
           <td>UGX ${stats.revenue.toLocaleString()}</td>
         `;
         reportTableBody.appendChild(tr);

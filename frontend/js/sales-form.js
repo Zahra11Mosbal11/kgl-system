@@ -79,7 +79,7 @@ function initSalesForm() {
                     branchInventory.forEach(item => {
                         const option = document.createElement("option");
                         option.value = item.produceName;
-                        option.textContent = `${item.produceName} (${item.quantity} T)`;
+                        option.textContent = `${item.produceName} (${item.quantity} kg)`;
                         productSelect.appendChild(option);
                     });
                      // Clear subtotal/total on branch change
@@ -97,7 +97,7 @@ function initSalesForm() {
                 branchInventory.forEach(item => {
                     const option = document.createElement("option");
                     option.value = item.produceName;
-                    option.textContent = `${item.produceName} (${item.quantity} T)`;
+                    option.textContent = `${item.produceName} (${item.quantity} kg)`;
                     productSelect.appendChild(option);
                 });
 
@@ -205,7 +205,7 @@ function initSalesForm() {
         if (!data.buyerName) errors.push("Customer Name is required");
         if (!data.salesAgentName) errors.push("Sales Person is required");
         if (!data.contact) errors.push("Customer Phone is required");
-        if (!data.tonnage) errors.push("Quantity (Tonnes) is required");
+        if (!data.tonnage) errors.push("Quantity (kg) is required");
         if (!data.unitPrice) errors.push("Unit Price is required");
         
         if (parseFloat(data.tonnage) <= 0) errors.push("Quantity must be greater than 0");
@@ -214,7 +214,7 @@ function initSalesForm() {
         // Stock check
         const selectedProd = branchInventory.find(i => i.produceName === data.produceName);
         if (selectedProd && parseFloat(data.tonnage) > selectedProd.quantity) {
-            errors.push(`Insufficient stock. Only ${selectedProd.quantity} Tonnes available.`);
+            errors.push(`Insufficient stock. Only ${selectedProd.quantity} kg available.`);
         }    
         
         const totalVal = parseFloat(totalAmountInput.value);
