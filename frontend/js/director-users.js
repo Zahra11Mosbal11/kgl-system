@@ -44,8 +44,8 @@ async function loadUsers() {
         const response = await api.get('/users');
         if (response && response.users) {
             let users = response.users;
-            // Managers only see their branch
-            if (session.role === 'manager') {
+            // Managers only see their branch (unless they are assigned to 'All')
+            if (session.role === 'manager' && session.branch !== 'All') {
                 users = users.filter(u => u.branch === session.branch);
             }
             allUsers = users;
@@ -71,7 +71,9 @@ function renderUsersTable(users) {
             <td>${user.branch}</td>
             <td><span class="badge ${user.isOnline ? 'bg-success' : 'bg-secondary'}">${user.isOnline ? 'Online' : 'Offline'}</span></td>
             <td>
-                ${user.username !== session.username ? `<button class="btn btn-sm btn-outline-danger" onclick="deactivateUser('${user._id}')">Deactivate</button>` : ''}
+                ${user.username !== session.username && !(session.role === 'manager' && user.role === 'director') 
+                    ? `<button class="btn btn-sm btn-outline-danger" onclick="deactivateUser('${user._id}')">Deactivate</button>` 
+                    : ''}
             </td>
         `;
         tableBody.appendChild(tr);
