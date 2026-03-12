@@ -139,8 +139,17 @@ function initUserForm() {
     
     if (session.role === 'manager') {
         if (branchSelect) {
-            branchSelect.value = session.branch;
-            branchSelect.disabled = true;
+            // Remove 'All Branches' option for managers
+            Array.from(branchSelect.options).forEach(opt => {
+                if (opt.value === 'All') opt.remove();
+            });
+
+            if (session.branch !== 'All') {
+                branchSelect.value = session.branch;
+                branchSelect.disabled = true;
+            } else {
+                branchSelect.disabled = false;
+            }
         }
         if (roleSelect) {
             roleSelect.innerHTML = '<option value="sales_agent">Sales Agent</option>';
@@ -157,7 +166,7 @@ function initUserForm() {
             password: document.getElementById('password').value,
             role: session.role === 'manager' ? 'sales_agent' : document.getElementById('role').value,
             fullName: document.getElementById('fullName').value,
-            branch: session.role === 'manager' ? session.branch : document.getElementById('branch').value,
+            branch: (session.role === 'manager' && session.branch !== 'All') ? session.branch : document.getElementById('branch').value,
             phone: document.getElementById('phone').value
         };
 

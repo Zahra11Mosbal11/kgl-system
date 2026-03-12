@@ -75,3 +75,20 @@ const api = {
 };
 
 window.api = api;
+
+// Mobile menu toggle logic
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+
+    if (mobileMenuToggle && sidebar && mobileOverlay) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        }
+
+        mobileMenuToggle.addEventListener('click', toggleSidebar);
+        mobileOverlay.addEventListener('click', toggleSidebar);
+    }
+});
